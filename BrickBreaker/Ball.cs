@@ -7,6 +7,8 @@ namespace BrickBreaker
     public class Ball
     {
         public int x, y, xSpeed, ySpeed, size;
+        public bool belowPaddle;
+        public bool madeContactLastTick;
         public Color colour;
 
         public static Random rand = new Random();
@@ -27,7 +29,7 @@ namespace BrickBreaker
             y = y + ySpeed;
         }
 
-        public bool BlockCollision(Block b)
+        public bool BlockCollision(Block b) //ISSUES
         {
             Rectangle blockRec = new Rectangle(b.x, b.y, b.width, b.height);
             Rectangle ballRec = new Rectangle(x, y, size, size);
@@ -40,18 +42,33 @@ namespace BrickBreaker
             return blockRec.IntersectsWith(ballRec);
         }
 
-        public void PaddleCollision(Paddle p)
+        public void PaddleCollision(Paddle p) // good as far as can tell
         {
             Rectangle ballRec = new Rectangle(x, y, size, size);
             Rectangle paddleRec = new Rectangle(p.x, p.y, p.width, p.height);
 
+            belowPaddle = (y + size - ySpeed > p.y);
+
+           
             if (ballRec.IntersectsWith(paddleRec))
             {
-                ySpeed *= -1;
+                if (!belowPaddle) // is at top of paddle
+                {
+                    ySpeed *= -1;
+                }
+                else if (belowPaddle && !madeContactLastTick) // is below top of paddle and didnt contact paddle last tick
+                {
+                    xSpeed *= -1;
+                }
+                madeContactLastTick = true;
+            }
+            else
+            {
+                madeContactLastTick = false;
             }
         }
 
-        public void WallCollision(UserControl UC)
+        public void WallCollision(UserControl UC) //good as far as can tell
         {
             // Collision with left wall
             if (x <= 0)
@@ -70,7 +87,7 @@ namespace BrickBreaker
             }
         }
 
-        public bool BottomCollision(UserControl UC)
+        public bool BottomCollision(UserControl UC) // good as far as can tell
         {
             Boolean didCollide = false;
 
