@@ -75,6 +75,18 @@
     <Compile Include="Paddle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Screens\Credits.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Screens\Credits.Designer.cs">
+      <DependentUpon>Credits.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\MenuScreenD.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Screens\MenuScreenD.Designer.cs">
+      <DependentUpon>MenuScreenD.cs</DependentUpon>
+    </Compile>
     <Compile Include="Screens\MenuScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -86,6 +98,12 @@
     </Compile>
     <Compile Include="Screens\GameScreen.Designer.cs">
       <DependentUpon>GameScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\OptionsScreenD.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Screens\OptionsScreenD.Designer.cs">
+      <DependentUpon>OptionsScreenD.cs</DependentUpon>
     </Compile>
     <Compile Include="Screens\OptionsScreenL.cs">
       <SubType>UserControl</SubType>
@@ -106,11 +124,20 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Screens\Credits.resx">
+      <DependentUpon>Credits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\MenuScreenD.resx">
+      <DependentUpon>MenuScreenD.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Screens\MenuScreen.resx">
       <DependentUpon>MenuScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\GameScreen.resx">
       <DependentUpon>GameScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\OptionsScreenD.resx">
+      <DependentUpon>OptionsScreenD.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\OptionsScreenL.resx">
       <DependentUpon>OptionsScreenL.cs</DependentUpon>

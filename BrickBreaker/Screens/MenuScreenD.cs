@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace BrickBreaker
 {
-    public partial class MenuScreen : UserControl
+    public partial class MenuScreenD : UserControl
     {
-        public MenuScreen()
+        public MenuScreenD()
         {
             InitializeComponent();
         }
@@ -22,11 +22,11 @@ namespace BrickBreaker
             Application.Exit();
         }
 
-        public void playButton_Click(object sender, EventArgs e)
+        private void playButton_Click(object sender, EventArgs e)
         {
             // Goes to the game screen
             GameScreen gs = new GameScreen();
-             Form form = this.FindForm();
+            Form form = this.FindForm();
 
             form.Controls.Add(gs);
             form.Controls.Remove(this);
@@ -36,34 +36,34 @@ namespace BrickBreaker
 
         private void playButton_Enter(object sender, EventArgs e)
         {
-            playButton.BackColor = Color.FromArgb(160, 49, 206, 170);
-            exitButton.BackColor = Color.FromArgb(160, 0, 135, 153);
-            optionsButton.BackColor = Color.FromArgb(0, 74, 153);
+            playButton.BackColor = Color.FromArgb(160, 48, 59, 207);
+            exitButton.BackColor = Color.FromArgb(160, 11, 26, 155);
+            optionsButton.BackColor = Color.FromArgb(0, 40, 84);
 
         }
 
         private void exitButton_Enter(object sender, EventArgs e)
         {
-            exitButton.BackColor = Color.FromArgb(160, 49, 206, 170);
-            playButton.BackColor = Color.FromArgb(160, 0, 135, 153);
-            optionsButton.BackColor = Color.FromArgb(0, 74, 153);
+            exitButton.BackColor = Color.FromArgb(160, 11, 26, 155);
+            playButton.BackColor = Color.FromArgb(160, 48, 59, 207);
+            optionsButton.BackColor = Color.FromArgb(0, 40, 84);
         }
 
         private void optionsButton_Enter(object sender, EventArgs e)
         {
-            optionsButton.BackColor = Color.FromArgb(160, 0, 135, 153);
-            playButton.BackColor = Color.FromArgb(160, 0, 135, 153);
-            exitButton.BackColor = Color.FromArgb(160, 0, 135, 153);
+            optionsButton.BackColor = Color.FromArgb(160, 11, 26, 155);
+            playButton.BackColor = Color.FromArgb(160, 11, 26, 155);
+            exitButton.BackColor = Color.FromArgb(160, 11, 26, 155);
         }
 
         private void optionsButton_Click(object sender, EventArgs e)
         {
             Form f = this.FindForm();
 
-            Screens.OptionsScreenL os = new Screens.OptionsScreenL();
-            f.Controls.Add(os);
-            os.Location = new Point((this.Width - os.Width) / 2, (this.Height - os.Height) / 2);
-            os.Show();
+            Screens.OptionsScreenD osd = new Screens.OptionsScreenD();
+            f.Controls.Add(osd);
+            osd.Location = new Point((this.Width - osd.Width) / 2, (this.Height - osd.Height) / 2);
+            osd.Show();
 
             f.Controls.Remove(this);
         }

@@ -92,6 +92,11 @@ namespace BrickBreaker
             gameTimer.Enabled = true;
         }
 
+        public void LFischStart()
+        {
+            //BackgroundImage = Properties.Resources.basicImage
+        }
+
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
         {
             //player 1 button presses
