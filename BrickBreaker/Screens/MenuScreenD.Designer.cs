@@ -1,6 +1,6 @@
 ﻿namespace BrickBreaker
 {
-    partial class MenuScreen
+    partial class MenuScreenD
     {
         /// <summary> 
         /// Required designer variable.
@@ -35,13 +35,13 @@
             // 
             // playButton
             // 
-            this.playButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(135)))), ((int)(((byte)(153)))));
+            this.playButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(26)))), ((int)(((byte)(155)))));
             this.playButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.playButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
             this.playButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.playButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.playButton.Font = new System.Drawing.Font("DynaPuff SemiBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.playButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(74)))), ((int)(((byte)(153)))));
+            this.playButton.Font = new System.Drawing.Font("DynaPuff", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(234)))), ((int)(((byte)(255)))));
             this.playButton.Location = new System.Drawing.Point(412, 100);
             this.playButton.Margin = new System.Windows.Forms.Padding(4);
             this.playButton.Name = "playButton";
@@ -55,11 +55,11 @@
             // 
             // exitButton
             // 
-            this.exitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(135)))), ((int)(((byte)(153)))));
+            this.exitButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(11)))), ((int)(((byte)(26)))), ((int)(((byte)(155)))));
             this.exitButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.exitButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.exitButton.Font = new System.Drawing.Font("DynaPuff SemiBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.exitButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(74)))), ((int)(((byte)(153)))));
+            this.exitButton.Font = new System.Drawing.Font("DynaPuff", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exitButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(234)))), ((int)(((byte)(255)))));
             this.exitButton.Location = new System.Drawing.Point(412, 323);
             this.exitButton.Margin = new System.Windows.Forms.Padding(4);
             this.exitButton.Name = "exitButton";
@@ -72,13 +72,13 @@
             // 
             // optionsButton
             // 
-            this.optionsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(74)))), ((int)(((byte)(153)))));
+            this.optionsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(40)))), ((int)(((byte)(84)))));
             this.optionsButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.optionsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.White;
             this.optionsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.White;
             this.optionsButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.optionsButton.Font = new System.Drawing.Font("DynaPuff", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(212)))), ((int)(((byte)(240)))));
+            this.optionsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(77)))), ((int)(((byte)(234)))), ((int)(((byte)(255)))));
             this.optionsButton.Location = new System.Drawing.Point(412, 563);
             this.optionsButton.Margin = new System.Windows.Forms.Padding(4);
             this.optionsButton.Name = "optionsButton";
@@ -89,16 +89,16 @@
             this.optionsButton.Click += new System.EventHandler(this.optionsButton_Click);
             this.optionsButton.Enter += new System.EventHandler(this.optionsButton_Enter);
             // 
-            // MenuScreen
+            // MenuScreenD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(212)))), ((int)(((byte)(240)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(7)))), ((int)(((byte)(112)))));
             this.Controls.Add(this.optionsButton);
             this.Controls.Add(this.exitButton);
             this.Controls.Add(this.playButton);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "MenuScreen";
+            this.Name = "MenuScreenD";
             this.Size = new System.Drawing.Size(1067, 677);
             this.ResumeLayout(false);
 
