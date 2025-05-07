@@ -70,7 +70,8 @@ namespace BrickBreaker
             int xSpeed = 6;
             int ySpeed = 6;
             int ballSize = 20;
-            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize);
+            double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
+            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
             
