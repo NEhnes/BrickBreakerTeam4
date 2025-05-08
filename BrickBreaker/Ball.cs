@@ -70,50 +70,63 @@ namespace BrickBreaker
             if (ballRec.IntersectsWith(paddleRec)) //TODO: replace with intersect code from block
             {
 
-                if (!belowPaddle) // is at top of paddle, bounce up
+                /* IN PROGRESS OF SUBBING IN RECTANGLE INTERSECTIONO METHOD */
+
+                Rectangle intersection = Rectangle.Intersect(ballRec, paddleRec); // get the intersection rectangle
+
+                if (intersection.Width > intersection.Height) // top contact
                 {
-
-                    measuredContactPoint = (x - p.x + size);
-                    Console.Out.WriteLine("measured: " + measuredContactPoint);
-
-                    // <20, 20-40, 40-50, 50-60, 60-80, 80-100
-                    // 6 cases to determine ball deflection
-
-                    if (measuredContactPoint < 20)
-                    {
-                        xSpeed = -7;
-                        ySpeed = -4;
-                    } 
-                    else if (measuredContactPoint < 40)
-                    {
-                        xSpeed = -6;
-                        ySpeed = -6;
-                    } 
-                    else if (measuredContactPoint < 50)
-                    {
-                        xSpeed = -4;
-                        ySpeed = -7;
-                    } 
-                    else if (measuredContactPoint < 60)
-                    {
-                        xSpeed = 4;
-                        ySpeed = -7;
-                    } 
-                    else if (measuredContactPoint < 80)
-                    {
-                        xSpeed = 6;
-                        ySpeed = -6;
-                    } 
-                    else
-                    {
-                        xSpeed = 7;
-                        ySpeed = -4;
-                    }
+                    ySpeed *= -1;
                 }
-                else if (belowPaddle && !madeContactLastTick) // is below top of paddle and didnt contact paddle last tick
+                else // side contact
                 {
+                    // if top or bottom
                     xSpeed *= -1;
                 }
+                //if (!belowPaddle) // is at top of paddle, bounce up
+                //{
+
+                //    measuredContactPoint = (x - p.x + size);
+                //    Console.Out.WriteLine("measured: " + measuredContactPoint);
+
+                //    // <20, 20-40, 40-50, 50-60, 60-80, 80-100
+                //    // 6 cases to determine ball deflection
+
+                //    if (measuredContactPoint < 20)
+                //    {
+                //        xSpeed = -7;
+                //        ySpeed = -4;
+                //    } 
+                //    else if (measuredContactPoint < 40)
+                //    {
+                //        xSpeed = -6;
+                //        ySpeed = -6;
+                //    } 
+                //    else if (measuredContactPoint < 50)
+                //    {
+                //        xSpeed = -4;
+                //        ySpeed = -7;
+                //    } 
+                //    else if (measuredContactPoint < 60)
+                //    {
+                //        xSpeed = 4;
+                //        ySpeed = -7;
+                //    } 
+                //    else if (measuredContactPoint < 80)
+                //    {
+                //        xSpeed = 6;
+                //        ySpeed = -6;
+                //    } 
+                //    else
+                //    {
+                //        xSpeed = 7;
+                //        ySpeed = -4;
+                //    }
+                //}
+                //else if (belowPaddle && !madeContactLastTick) // is below top of paddle and didnt contact paddle last tick
+                //{
+                //    xSpeed *= -1;
+                //}
                 madeContactLastTick = true;
             }
             else
@@ -161,6 +174,9 @@ namespace BrickBreaker
             return (value - fromMin) * (newMax - newMin) / (fromMax - fromMin) + newMin;
         }
 
+        private void LaunchBall(int measuredContact)
+        {
 
+        }
     }
 }
