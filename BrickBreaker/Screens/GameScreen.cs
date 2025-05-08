@@ -68,13 +68,14 @@ namespace BrickBreaker
 
             // setup starting ball values
             int ballX = this.Width / 2 - 10;
-            int ballY = this.Height - paddle.height - 80;
+            int ballSize = 20;
+            int ballY = this.Height - paddle.height - 80 - ballSize;
 
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            int ballSize = 20;
-            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize);
+            double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
+            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
             
@@ -94,6 +95,11 @@ namespace BrickBreaker
 
             // start the game engine loop
             gameTimer.Enabled = true;
+        }
+
+        public void LFischStart()
+        {
+            //BackgroundImage = Properties.Resources.basicImage
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
