@@ -70,6 +70,21 @@ namespace BrickBreaker
             if (ballRec.IntersectsWith(paddleRec)) //TODO: replace with intersect code from block
             {
 
+                ///* IN PROCESS OF SUBBING IN RECTANGLE INTERSECTION METHOD */
+
+                //Rectangle intersection = Rectangle.Intersect(ballRec, paddleRec); // get the intersection rectangle
+
+                //if (intersection.Width > intersection.Height) // top contact
+                //{
+                //    ySpeed *= -1;
+                //}
+                //else // side contact
+                //{
+                //    // if top or bottom
+                //    xSpeed *= -1;
+                //}
+
+
                 if (!belowPaddle) // is at top of paddle, bounce up
                 {
 
@@ -83,27 +98,27 @@ namespace BrickBreaker
                     {
                         xSpeed = -7;
                         ySpeed = -4;
-                    } 
+                    }
                     else if (measuredContactPoint < 40)
                     {
                         xSpeed = -6;
                         ySpeed = -6;
-                    } 
+                    }
                     else if (measuredContactPoint < 50)
                     {
                         xSpeed = -4;
                         ySpeed = -7;
-                    } 
+                    }
                     else if (measuredContactPoint < 60)
                     {
                         xSpeed = 4;
                         ySpeed = -7;
-                    } 
+                    }
                     else if (measuredContactPoint < 80)
                     {
                         xSpeed = 6;
                         ySpeed = -6;
-                    } 
+                    }
                     else
                     {
                         xSpeed = 7;
@@ -161,6 +176,9 @@ namespace BrickBreaker
             return (value - fromMin) * (newMax - newMin) / (fromMax - fromMin) + newMin;
         }
 
+        private void LaunchBall(int measuredContact)
+        {
 
+        }
     }
 }
