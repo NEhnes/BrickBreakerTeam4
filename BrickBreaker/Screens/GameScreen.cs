@@ -28,6 +28,7 @@ namespace BrickBreaker
         // Paddle and Ball objects
         Paddle paddle;
         Ball ball;
+        
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
@@ -36,6 +37,9 @@ namespace BrickBreaker
         SolidBrush paddleBrush = new SolidBrush(Color.White);
         SolidBrush ballBrush = new SolidBrush(Color.White);
         SolidBrush blockBrush = new SolidBrush(Color.Red);
+
+        List<Powerup> powerups = new List<Powerup>();
+        Random rand = new Random();
 
         #endregion
 
@@ -64,12 +68,12 @@ namespace BrickBreaker
 
             // setup starting ball values
             int ballX = this.Width / 2 - 10;
-            int ballY = this.Height - paddle.height - 80;
+            int ballSize = 20;
+            int ballY = this.Height - paddle.height - 80 - ballSize;
 
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            int ballSize = 20;
             double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
@@ -179,9 +183,25 @@ namespace BrickBreaker
                         gameTimer.Enabled = false;
                         OnEnd();
                     }
+                    // Block was hit — now spawn a powerup
+                    if (rand.Next(0, 100) < 25) // 20% chance
+                    {
+                        string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
+                        string type = types[rand.Next(types.Length)];
+
+                        Powerup newPowerup = new Powerup(b.x, b.y, type);
+                        powerups.Add(newPowerup);
+                    }
+
 
                     break;
                 }
+            }
+
+
+            foreach (Powerup p in powerups)
+            {
+                p.Move();
             }
 
             //redraw the screen
@@ -219,6 +239,11 @@ namespace BrickBreaker
 
             // Draws ball
             e.Graphics.FillRectangle(ballBrush, ball.x, ball.y, ball.size, ball.size);
+
+            foreach (Powerup p in powerups)
+            {
+                p.Draw(e.Graphics);
+            }
         }
     }
 }
