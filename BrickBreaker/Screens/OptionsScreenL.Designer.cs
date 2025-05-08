@@ -116,6 +116,7 @@
             this.creditsLabel.TabIndex = 7;
             this.creditsLabel.Text = "Credits";
             this.creditsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.creditsLabel.Click += new System.EventHandler(this.creditsLabel_Click);
             // 
             // backButton
             // 

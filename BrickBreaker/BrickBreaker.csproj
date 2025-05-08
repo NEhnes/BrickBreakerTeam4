@@ -152,6 +152,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\DynaPuff-VariableFont_wdth,wght.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -169,7 +170,22 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
+    <None Include="Resources\Screenshot 2025-05-05 134512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Screenshot 2025-04-30 144138.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\undersea-volcano-eruption-380x230.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\waves-image.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\waves1-image-removebg-preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Screenshot 2025-05-07 143257.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

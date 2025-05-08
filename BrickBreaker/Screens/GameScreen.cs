@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
+using System.Drawing.Text;
 
 namespace BrickBreaker
 {
@@ -96,6 +97,9 @@ namespace BrickBreaker
         public void LFischStart()
         {
             //BackgroundImage = Properties.Resources.basicImage
+
+            //string fontFilePath = 
+            //PrivateFontCollection font = new PrivateFontCollection();
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
