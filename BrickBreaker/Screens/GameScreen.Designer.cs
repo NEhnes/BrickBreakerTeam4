@@ -44,7 +44,7 @@
             this.lifeLabel.AutoSize = true;
             this.lifeLabel.Font = new System.Drawing.Font("DynaPuff Medium", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lifeLabel.ForeColor = System.Drawing.Color.White;
-            this.lifeLabel.Location = new System.Drawing.Point(984, 575);
+            this.lifeLabel.Location = new System.Drawing.Point(14, 637);
             this.lifeLabel.Name = "lifeLabel";
             this.lifeLabel.Size = new System.Drawing.Size(68, 29);
             this.lifeLabel.TabIndex = 0;
@@ -55,6 +55,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.lifeLabel);
             this.DoubleBuffered = true;
             this.Margin = new System.Windows.Forms.Padding(4);

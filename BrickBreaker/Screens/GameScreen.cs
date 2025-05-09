@@ -96,10 +96,17 @@ namespace BrickBreaker
 
         public void LFischStart()
         {
-            //BackgroundImage = Properties.Resources.basicImage
-
             //string fontFilePath = 
             //PrivateFontCollection font = new PrivateFontCollection();
+
+            Random randBG = new Random();
+
+            int backImg = randBG.Next(1, 11);
+
+            if (backImg >= 8)
+            {
+                //GameScreen.BackgroundImage = Properties.Resources.BasicImage;
+            }
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
