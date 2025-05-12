@@ -10,7 +10,7 @@ namespace BrickBreaker
         public int size;
         public int xSpeed, ySpeed, x, y;
         public bool belowPaddle;
-        public bool madeContactLastTick;
+        public bool lastHitPaddle;
         public Color colour;
 
         public static Random rand = new Random();
@@ -52,6 +52,7 @@ namespace BrickBreaker
                     // if top or bottom
                     xSpeed *= -1;
                 }
+                lastHitPaddle = false;
             }
 
             return blockRec.IntersectsWith(ballRec);
@@ -67,12 +68,12 @@ namespace BrickBreaker
 
             double measuredContactPoint; // ball x, relative to paddle x (0-100)
 
-            if (ballRec.IntersectsWith(paddleRec) && !madeContactLastTick)
+            if (ballRec.IntersectsWith(paddleRec) && !lastHitPaddle)
             {
 
                 Rectangle intersection = Rectangle.Intersect(ballRec, paddleRec);
 
-                if (intersection.Width > intersection.Height && !belowPaddle) // top contact
+                if (intersection.Width > intersection.Height) // top contact
                 {
 
                     measuredContactPoint = (x - p.x + size);
@@ -117,11 +118,7 @@ namespace BrickBreaker
                     // if top or bottom
                     xSpeed *= -1;
                 }
-                madeContactLastTick = true; 
-            }
-            else
-            {
-                madeContactLastTick = false;
+                lastHitPaddle = true; 
             }
         }
 
@@ -145,6 +142,7 @@ namespace BrickBreaker
                 y = 2;
                 ySpeed *= -1;
             }
+            lastHitPaddle = false;
         }
 
         public bool BottomCollision(UserControl UC) // good as far as can tell
@@ -164,7 +162,7 @@ namespace BrickBreaker
             return (value - fromMin) * (newMax - newMin) / (fromMax - fromMin) + newMin;
         }
 
-        private void LaunchBall(int measuredContact)
+        private void LaunchBall(int _launchangle)
         {
 
         }
