@@ -29,13 +29,15 @@ namespace BrickBreaker
         Paddle paddle;
         Ball ball;
 
+        // Ball Colour
+        public static Color ballColor = Color.White;
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
-        SolidBrush ballBrush = new SolidBrush(Color.White);
+        SolidBrush ballBrush = new SolidBrush(ballColor);
         SolidBrush blockBrush = new SolidBrush(Color.Red);
 
         List<Powerup> powerups = new List<Powerup>();
@@ -143,76 +145,79 @@ namespace BrickBreaker
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-                // Move the paddle
-                if (leftArrowDown && paddle.x > 0)
+            // Move the paddle
+            if (leftArrowDown && paddle.x > 0)
+            {
+                paddle.Move("left");
+            }
+            if (rightArrowDown && paddle.x < (this.Width - paddle.width))
+            {
+                paddle.Move("right");
+            }
+
+            // Move ball
+            ball.Move();
+
+            // update ball color
+            ballBrush = new SolidBrush(ballColor);
+
+            // Check for collision with top and side walls
+            ball.WallCollision(this);
+
+            // Check for ball hitting bottom of screen
+            if (ball.BottomCollision(this))
+            {
+                lives--;
+
+                // Moves the ball back to origin
+                ball.x = ((paddle.x - (ball.size / 2)) + (paddle.width / 2));
+                ball.y = (this.Height - paddle.height) - 85;
+
+                if (lives == 0)
                 {
-                    paddle.Move("left");
+                    gameTimer.Enabled = false;
+                    OnEnd();
                 }
-                if (rightArrowDown && paddle.x < (this.Width - paddle.width))
+            }
+
+            // Check for collision of ball with paddle, (incl. paddle movement)
+            ball.PaddleCollision(paddle);
+
+            // Check if ball has collided with any blocks
+            foreach (Block b in blocks)
+            {
+                if (ball.BlockCollision(b))
                 {
-                    paddle.Move("right");
-                }
+                    blocks.Remove(b);
 
-                // Move ball
-                ball.Move();
-
-                // Check for collision with top and side walls
-                ball.WallCollision(this);
-
-                // Check for ball hitting bottom of screen
-                if (ball.BottomCollision(this))
-                {
-                    lives--;
-
-                    // Moves the ball back to origin
-                    ball.x = ((paddle.x - (ball.size / 2)) + (paddle.width / 2));
-                    ball.y = (this.Height - paddle.height) - 85;
-
-                    if (lives == 0)
+                    if (blocks.Count == 0)
                     {
                         gameTimer.Enabled = false;
                         OnEnd();
                     }
-                }
-
-                // Check for collision of ball with paddle, (incl. paddle movement)
-                ball.PaddleCollision(paddle);
-
-                // Check if ball has collided with any blocks
-                foreach (Block b in blocks)
-                {
-                    if (ball.BlockCollision(b))
+                    // Block was hit — now spawn a powerup
+                    if (rand.Next(0, 100) < 25) // 20% chance
                     {
-                        blocks.Remove(b);
+                        string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
+                        string type = types[rand.Next(types.Length)];
 
-                        if (blocks.Count == 0)
-                        {
-                            gameTimer.Enabled = false;
-                            OnEnd();
-                        }
-                        // Block was hit — now spawn a powerup
-                        if (rand.Next(0, 100) < 25) // 20% chance
-                        {
-                            string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
-                            string type = types[rand.Next(types.Length)];
-
-                            Powerup newPowerup = new Powerup(b.x, b.y, type);
-                            powerups.Add(newPowerup);
-                        }
-
-
-                        break;
+                        Powerup newPowerup = new Powerup(b.x, b.y, type);
+                        powerups.Add(newPowerup);
                     }
+
+
+                    break;
                 }
+            }
 
 
-                foreach (Powerup p in powerups)
-                {
-                    p.Move();
-                }
+            foreach (Powerup p in powerups)
+            {
+                p.Move();
+            }
 
-                //redraw the screen
-                Refresh();
+            //redraw the screen
+            Refresh();
         }
 
         public void OnEnd()

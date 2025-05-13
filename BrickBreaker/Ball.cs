@@ -15,6 +15,9 @@ namespace BrickBreaker
 
         public static Random rand = new Random();
         public double speedMultiplier;
+        private Color[] colorCycle = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.MediumPurple};
+        private int moveCounter = 0;
+        private int colorIndex = 0;
 
         public Ball(int _x, int _y, int _xSpeed, int _ySpeed, int _ballSize, double _speedMultiplier)
         {
@@ -31,6 +34,22 @@ namespace BrickBreaker
         {
             x =  (int)(x + xSpeed * speedMultiplier);
             y = (int)(y + ySpeed * speedMultiplier);
+
+            if (moveCounter % 10 == 0)
+            {
+                GameScreen.ballColor = colorCycle[colorIndex];
+                colorIndex++;
+                if (colorIndex >= colorCycle.Length)
+                {
+                    colorIndex = 0;
+                }
+            }
+
+                moveCounter++;
+            if (moveCounter > 100)
+            {
+                moveCounter = 0;
+            }
         }
 
         public bool BlockCollision(Block b) // fixed :)
@@ -58,7 +77,7 @@ namespace BrickBreaker
             return blockRec.IntersectsWith(ballRec);
         }
 
-        public void PaddleCollision(Paddle p) // working with a few simple directions - side contact is bugged
+        public void PaddleCollision(Paddle p) // fixed :)
         {
             //create rectangles for collision
             Rectangle ballRec = new Rectangle(x, y, size, size);
