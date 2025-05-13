@@ -42,6 +42,7 @@
             // lifeLabel
             // 
             this.lifeLabel.AutoSize = true;
+            this.lifeLabel.BackColor = System.Drawing.Color.Transparent;
             this.lifeLabel.Font = new System.Drawing.Font("DynaPuff Medium", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lifeLabel.ForeColor = System.Drawing.Color.White;
             this.lifeLabel.Location = new System.Drawing.Point(14, 637);
