@@ -10,11 +10,14 @@ namespace BrickBreaker
         public int size;
         public int xSpeed, ySpeed, x, y;
         public bool belowPaddle;
-        public bool madeContactLastTick;
+        public bool lastHitPaddle;
         public Color colour;
 
         public static Random rand = new Random();
         public double speedMultiplier;
+        private Color[] colorCycle = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.MediumPurple};
+        private int moveCounter = 0;
+        private int colorIndex = 0;
 
         public Ball(int _x, int _y, int _xSpeed, int _ySpeed, int _ballSize, double _speedMultiplier)
         {
@@ -31,9 +34,25 @@ namespace BrickBreaker
         {
             x =  (int)(x + xSpeed * speedMultiplier);
             y = (int)(y + ySpeed * speedMultiplier);
+
+            if (moveCounter % 10 == 0)
+            {
+                GameScreen.ballColor = colorCycle[colorIndex];
+                colorIndex++;
+                if (colorIndex >= colorCycle.Length)
+                {
+                    colorIndex = 0;
+                }
+            }
+
+                moveCounter++;
+            if (moveCounter > 100)
+            {
+                moveCounter = 0;
+            }
         }
 
-        public bool BlockCollision(Block b)
+        public bool BlockCollision(Block b) // fixed :)
         {
             Rectangle blockRec = new Rectangle(b.x, b.y, b.width, b.height);
             Rectangle ballRec = new Rectangle(x, y, size, size);
@@ -52,12 +71,13 @@ namespace BrickBreaker
                     // if top or bottom
                     xSpeed *= -1;
                 }
+                lastHitPaddle = false;
             }
 
             return blockRec.IntersectsWith(ballRec);
         }
 
-        public void PaddleCollision(Paddle p) // working with a few simple directions + a few bugs
+        public void PaddleCollision(Paddle p) // fixed :)
         {
             //create rectangles for collision
             Rectangle ballRec = new Rectangle(x, y, size, size);
@@ -67,58 +87,57 @@ namespace BrickBreaker
 
             double measuredContactPoint; // ball x, relative to paddle x (0-100)
 
-            if (ballRec.IntersectsWith(paddleRec)) //TODO: replace with intersect code from block
+            if (ballRec.IntersectsWith(paddleRec) && !lastHitPaddle)
             {
 
-                if (!belowPaddle) // is at top of paddle, bounce up
+                Rectangle intersection = Rectangle.Intersect(ballRec, paddleRec);
+
+                if (intersection.Width > intersection.Height) // top contact
                 {
 
                     measuredContactPoint = (x - p.x + size);
                     Console.Out.WriteLine("measured: " + measuredContactPoint);
 
-                    // <20, 20-40, 40-50, 50-60, 60-80, 80-100
                     // 6 cases to determine ball deflection
+                    int maxWidth = p.width + size; // added for compatability with various paddle sizes
 
-                    if (measuredContactPoint < 20)
+                    if (measuredContactPoint < 0.2 * maxWidth)
                     {
                         xSpeed = -7;
                         ySpeed = -4;
-                    } 
-                    else if (measuredContactPoint < 40)
+                    }
+                    else if (measuredContactPoint < 0.4 * maxWidth)
                     {
                         xSpeed = -6;
                         ySpeed = -6;
-                    } 
-                    else if (measuredContactPoint < 50)
+                    }
+                    else if (measuredContactPoint < 0.5 * maxWidth)
                     {
                         xSpeed = -4;
                         ySpeed = -7;
-                    } 
-                    else if (measuredContactPoint < 60)
+                    }
+                    else if (measuredContactPoint < 0.6 * maxWidth)
                     {
                         xSpeed = 4;
                         ySpeed = -7;
-                    } 
-                    else if (measuredContactPoint < 80)
+                    }
+                    else if (measuredContactPoint < 0.8 * maxWidth)
                     {
                         xSpeed = 6;
                         ySpeed = -6;
-                    } 
+                    }
                     else
                     {
                         xSpeed = 7;
                         ySpeed = -4;
                     }
                 }
-                else if (belowPaddle && !madeContactLastTick) // is below top of paddle and didnt contact paddle last tick
+                else // side contact
                 {
+                    // if top or bottom
                     xSpeed *= -1;
                 }
-                madeContactLastTick = true;
-            }
-            else
-            {
-                madeContactLastTick = false;
+                lastHitPaddle = true; 
             }
         }
 
@@ -142,6 +161,7 @@ namespace BrickBreaker
                 y = 2;
                 ySpeed *= -1;
             }
+            lastHitPaddle = false;
         }
 
         public bool BottomCollision(UserControl UC) // good as far as can tell
@@ -161,6 +181,9 @@ namespace BrickBreaker
             return (value - fromMin) * (newMax - newMin) / (fromMax - fromMin) + newMin;
         }
 
+        private void LaunchBall(int _launchangle)
+        {
 
+        }
     }
 }

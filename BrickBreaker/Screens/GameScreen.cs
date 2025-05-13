@@ -22,7 +22,7 @@ namespace BrickBreaker
         #region global values
 
         //player1 button control keys - DO NOT CHANGE
-        Boolean leftArrowDown, rightArrowDown;
+        Boolean leftArrowDown, rightArrowDown, spacebar;
 
         // Game values
         int lives;
@@ -31,16 +31,19 @@ namespace BrickBreaker
         Paddle paddle;
         Ball ball;
 
+        // Ball Colour
+        public static Color ballColor = Color.White;
+
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
-        SolidBrush ballBrush = new SolidBrush(Color.White);
+        SolidBrush ballBrush = new SolidBrush(ballColor);
         SolidBrush blockBrush = new SolidBrush(Color.Red);
 
-        //Image
-        //public static Image backgroundImage;
+        List<Powerup> powerups = new List<Powerup>();
+        Random rand = new Random();
 
         #endregion
 
@@ -71,19 +74,19 @@ namespace BrickBreaker
 
             // setup starting ball values
             int ballX = this.Width / 2 - 10;
-            int ballY = this.Height - paddle.height - 80;
+            int ballSize = 20;
+            int ballY = this.Height - paddle.height - 80 - ballSize;
 
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            int ballSize = 20;
-            double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
+            double speedMultiplier = 1.4; // speed multiplier for ball speed -> still buggy for values > 1. 
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
-            
+
             //TODO - replace all the code in this region eventually with code that loads levels from xml files
-            
+
             blocks.Clear();
             int x = 10;
 
@@ -139,6 +142,10 @@ namespace BrickBreaker
                 case Keys.Right:
                     rightArrowDown = true;
                     break;
+                case Keys.Space:
+                    spacebar = true;
+                    gameTimer.Enabled = true; // start the game timer
+                    break;
                 default:
                     break;
             }
@@ -154,6 +161,9 @@ namespace BrickBreaker
                     break;
                 case Keys.Right:
                     rightArrowDown = false;
+                    break;
+                case Keys.Space:
+                    spacebar = false;
                     break;
                 default:
                     break;
@@ -174,6 +184,9 @@ namespace BrickBreaker
 
             // Move ball
             ball.Move();
+
+            // update ball color
+            ballBrush = new SolidBrush(ballColor);
 
             // Check for collision with top and side walls
             ball.WallCollision(this);
@@ -209,9 +222,25 @@ namespace BrickBreaker
                         gameTimer.Enabled = false;
                         OnEnd();
                     }
+                    // Block was hit — now spawn a powerup
+                    if (rand.Next(0, 100) < 25) // 20% chance
+                    {
+                        string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
+                        string type = types[rand.Next(types.Length)];
+
+                        Powerup newPowerup = new Powerup(b.x, b.y, type);
+                        powerups.Add(newPowerup);
+                    }
+
 
                     break;
                 }
+            }
+
+
+            foreach (Powerup p in powerups)
+            {
+                p.Move();
             }
 
             //redraw the screen
@@ -223,7 +252,7 @@ namespace BrickBreaker
             // Goes to the game over screen
             Form form = this.FindForm();
             MenuScreen ps = new MenuScreen();
-            
+
             ps.Location = new Point((form.Width - ps.Width) / 2, (form.Height - ps.Height) / 2);
 
             form.Controls.Add(ps);
@@ -244,6 +273,11 @@ namespace BrickBreaker
 
             // Draws ball
             e.Graphics.FillRectangle(ballBrush, ball.x, ball.y, ball.size, ball.size);
+
+            foreach (Powerup p in powerups)
+            {
+                p.Draw(e.Graphics);
+            }
         }
     }
 }

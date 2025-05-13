@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<level>
+	<brick>
+		<x>237</x>
+		<y>202</y>
+		<hp>1</hp>
+		<colour>Blue</colour>
+	</brick>
+	<brick>
+		<x>275</x>
+		<y>202</y>
+		<hp>1</hp>
+		<colour>Blue</colour>
+	</brick>
+	<brick>
+		<x>351</x>
+		<y>202</y>
+		<hp>1</hp>
+		<colour>Blue</colour>
+	</brick>
+	<brick>
+		<x>313</x>
+		<y>202</y>
+		<hp>3</hp>
+		<colour>Pink</colour>
+	</brick>
+	<brick>
+		<x>237</x>
+		<y>113</y>
+		<hp>2</hp>
+		<colour>Red</colour>
+	</brick>
+	<brick>
+		<x>351</x>
+		<y>113</y>
+		<hp>2</hp>
+		<colour>Red</colour>
+	</brick>
+</level>
+
+<!--Make the level using labels
+Add side chains with location(x,y) and size(x.y) and durability
+Move information into a graphic
+Overlay image over graphic and remove labels
+
+Rectangle penisRec = new Rectangle(this.Width / 2, this.Height / 2, 100, 100);
+e.Graphics.DrawImage(Properties.Resources.blueCoral, penisrec);-->
