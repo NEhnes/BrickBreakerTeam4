@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Media;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using System.Xml;
 
 namespace BrickBreaker
 {
@@ -36,6 +37,7 @@ namespace BrickBreaker
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
+        string currentLevel = "Level1";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
@@ -268,7 +270,27 @@ namespace BrickBreaker
             // Draws blocks
             foreach (Block b in blocks)
             {
-                e.Graphics.FillRectangle(blockBrush, b.x, b.y, b.width, b.height);
+                Rectangle recNumber = new Rectangle(b.x, b.y, b.width, b.height);
+                if (b.hp == 1)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.blueCoral, recNumber);
+                }
+                else if (b.hp == 2)
+                {
+                    //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                }
+                else if (b.hp == 3)
+                {
+                   // e.Graphics.DrawImage(Properties.Resources.pinkCoral, recNumber);
+                }
+                else if (b.hp == 5)
+                {
+                    //e.Graphics.DrawImage(Properties.Resources.yellowCoral, recNumber);
+                }
+                else if (b.hp == 10)
+                {
+                    //e.Graphics.DrawImage(Properties.Resources.greyCoral, recNumber);
+                }
             }
 
             // Draws ball
@@ -277,6 +299,38 @@ namespace BrickBreaker
             foreach (Powerup p in powerups)
             {
                 p.Draw(e.Graphics);
+            }
+        }
+
+        private void LoadBlocks()
+        {
+            string newX, newY, newHp, newColour;
+
+            //Open the XML file and place it in reader 
+            XmlReader reader = XmlReader.Create($"{currentLevel}.xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Text)
+
+                {
+                    newX = reader.ReadString();
+                    int blockX = Convert.ToInt32(newX);
+
+                    reader.ReadToNextSibling("y");
+                    newY = reader.ReadString();
+                    int blockY = Convert.ToInt32(newY);
+
+                    reader.ReadToNextSibling("hp");
+                    newHp = reader.ReadString();
+                    int blockHp = Convert.ToInt32(newHp);
+
+                    reader.ReadToNextSibling("colour");
+                    newColour = reader.ReadString();
+                    Color blockColour = Color.FromName(newColour); // potential error source later on
+
+                    Block b = new Block(blockX, blockY, blockHp, blockColour);
+                    blocks.Add(b);
+                }
             }
         }
     }

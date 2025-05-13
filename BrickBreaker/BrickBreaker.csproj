@@ -189,7 +189,13 @@
     <None Include="Resources\Screenshot 2025-05-07 143257.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Level01.xml" />
+    <None Include="Resources\Level1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Level1.xml" />
+    <None Include="Resources\Screenshot 2025-05-05 1345123.png" />
+    <None Include="Resources\Screenshot 2025-05-05 1345122.png" />
+    <None Include="Resources\Screenshot 2025-05-05 1345121.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
