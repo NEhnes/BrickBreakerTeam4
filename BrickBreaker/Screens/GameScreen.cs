@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
 
 namespace BrickBreaker
 {
@@ -54,6 +56,8 @@ namespace BrickBreaker
 
         public void OnStart()
         {
+            LFischStart();
+
             //set life counter
             lives = 3;
 
@@ -101,7 +105,30 @@ namespace BrickBreaker
 
         public void LFischStart()
         {
-            //BackgroundImage = Properties.Resources.basicImage
+            lifeLabel.Text = $"{lives}";
+            string fontFilePath; 
+            PrivateFontCollection font = new PrivateFontCollection();
+            byte[] fontData = Properties.Resources.DynaPuff_VariableFont_wdth_wght;
+            IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            font.AddMemoryFont(fontPtr, fontData.Length);
+
+            Random randBG = new Random();
+
+            int backImg = randBG.Next(1, 11);
+
+            if (backImg <= 8)
+            {
+                BackgroundImage = Properties.Resources.BasicImage;
+            }
+            else if (backImg == 9)
+            {
+                BackgroundImage = Properties.Resources.SpecImage1;
+            }
+            else
+            {
+                BackgroundImage = Properties.Resources.SpecImage2;
+            }
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
