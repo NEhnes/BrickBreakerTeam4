@@ -192,7 +192,14 @@
     <None Include="Resources\Level1.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Level1.xml" />
+    <None Include="Level1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="Level2.xml" />
+    <None Include="Resources\Level1.xml.bmp" />
+    <None Include="Resources\THIS_ONE.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Screenshot 2025-05-05 1345123.png" />
     <None Include="Resources\Screenshot 2025-05-05 1345122.png" />
     <None Include="Resources\Screenshot 2025-05-05 1345121.png" />

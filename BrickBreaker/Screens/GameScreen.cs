@@ -15,6 +15,7 @@ using System.Media;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.Xml;
+using System.Runtime.CompilerServices;
 
 namespace BrickBreaker
 {
@@ -43,6 +44,10 @@ namespace BrickBreaker
         SolidBrush paddleBrush = new SolidBrush(Color.White);
         SolidBrush ballBrush = new SolidBrush(ballColor);
         SolidBrush blockBrush = new SolidBrush(Color.Red);
+        SolidBrush redBrush = new SolidBrush(Color.Red);
+        SolidBrush blueBrush = new SolidBrush(Color.Blue);
+        SolidBrush greenBrush = new SolidBrush(Color.Green);
+
 
         List<Powerup> powerups = new List<Powerup>();
         Random rand = new Random();
@@ -75,14 +80,14 @@ namespace BrickBreaker
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
-            int ballX = this.Width / 2 - 10;
             int ballSize = 20;
-            int ballY = this.Height - paddle.height - 80 - ballSize;
+            int ballX = paddle.x + paddleWidth / 2 - ballSize / 2;
+            int ballY = paddle.y - ballSize - 2;
 
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            double speedMultiplier = 1.4; // speed multiplier for ball speed -> still buggy for values > 1. 
+            double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
@@ -99,16 +104,19 @@ namespace BrickBreaker
                 blocks.Add(b1);
             }
 
+            blocks.Clear();
+            LoadBlocks();
+
             #endregion
 
             // start the game engine loop
-            gameTimer.Enabled = true;
+            gameTimer.Enabled = false;
         }
 
         public void LFischStart()
         {
             lifeLabel.Text = $"{lives}";
-            string fontFilePath; 
+            string fontFilePath;
             PrivateFontCollection font = new PrivateFontCollection();
             byte[] fontData = Properties.Resources.DynaPuff_VariableFont_wdth_wght;
             IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
@@ -188,7 +196,9 @@ namespace BrickBreaker
             ball.Move();
 
             // update ball color
+            ball.SetBallColor();
             ballBrush = new SolidBrush(ballColor);
+
 
             // Check for collision with top and side walls
             ball.WallCollision(this);
@@ -271,25 +281,29 @@ namespace BrickBreaker
             foreach (Block b in blocks)
             {
                 Rectangle recNumber = new Rectangle(b.x, b.y, b.width, b.height);
-                if (b.hp == 1)
+
+                switch (b.hp)
                 {
-                    e.Graphics.DrawImage(Properties.Resources.blueCoral, recNumber);
-                }
-                else if (b.hp == 2)
-                {
-                    //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                }
-                else if (b.hp == 3)
-                {
-                   // e.Graphics.DrawImage(Properties.Resources.pinkCoral, recNumber);
-                }
-                else if (b.hp == 5)
-                {
-                    //e.Graphics.DrawImage(Properties.Resources.yellowCoral, recNumber);
-                }
-                else if (b.hp == 10)
-                {
-                    //e.Graphics.DrawImage(Properties.Resources.greyCoral, recNumber);
+                    case 1:
+                        e.Graphics.FillRectangle(redBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 2:
+                        e.Graphics.FillRectangle(blueBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 3:
+                        e.Graphics.FillRectangle(greenBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 4:
+                        e.Graphics.FillRectangle(blockBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    default:
+                        e.Graphics.FillRectangle(blockBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
                 }
             }
 
