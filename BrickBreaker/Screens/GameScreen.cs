@@ -156,6 +156,12 @@ namespace BrickBreaker
                     spacebar = true;
                     gameTimer.Enabled = true; // start the game timer
                         break;
+                case Keys.Escape:
+                    OnEnd();
+                    break;
+                case Keys.Tab:
+                    gameTimer.Enabled = !gameTimer.Enabled;
+                    break;
                 default:
                     break;
             }
