@@ -34,17 +34,7 @@ namespace BrickBreaker
         {
             x =  (int)(x + xSpeed * speedMultiplier);
             y = (int)(y + ySpeed * speedMultiplier);
-
-            if (moveCounter % 10 == 0)
-            {
-                GameScreen.ballColor = colorCycle[colorIndex];
-                colorIndex++;
-                if (colorIndex >= colorCycle.Length)
-                {
-                    colorIndex = 0;
-                }
-            }
-
+            
                 moveCounter++;
             if (moveCounter > 100)
             {
@@ -181,9 +171,22 @@ namespace BrickBreaker
             return (value - fromMin) * (newMax - newMin) / (fromMax - fromMin) + newMin;
         }
 
-        private void LaunchBall(int _launchangle)
+        public void LaunchBall(int _launchangle)
         {
 
+        }
+
+        public void SetBallColor()
+        {
+            if (moveCounter % 50 == 0)
+            {
+                GameScreen.ballColor = colorCycle[colorIndex];
+                colorIndex++;
+                if (colorIndex >= colorCycle.Length)
+                {
+                    colorIndex = 0;
+                }
+            }
         }
     }
 }

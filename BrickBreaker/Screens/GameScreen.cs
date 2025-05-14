@@ -1,6 +1,6 @@
-﻿/*  Created by: 
+﻿/*  Created by: Liam, Sean, Nathan, Aaron
  *  Project: Brick Breaker
- *  Date: 
+ *  Date: May '25
  */ 
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,8 @@ using System.Media;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Xml;
+using System.Runtime.CompilerServices;
 
 namespace BrickBreaker
 {
@@ -37,11 +39,16 @@ namespace BrickBreaker
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
+        string currentLevel = "Level2";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
         SolidBrush ballBrush = new SolidBrush(ballColor);
         SolidBrush blockBrush = new SolidBrush(Color.Red);
+        SolidBrush redBrush = new SolidBrush(Color.Red);
+        SolidBrush blueBrush = new SolidBrush(Color.Blue);
+        SolidBrush greenBrush = new SolidBrush(Color.Green);
+
 
         List<Powerup> powerups = new List<Powerup>();
         Random rand = new Random();
@@ -77,18 +84,18 @@ namespace BrickBreaker
             int paddleHeight = 20;
             int paddleX = ((this.Width / 2) - (paddleWidth / 2));
             int paddleY = (this.Height - paddleHeight) - 60;
-            int paddleSpeed = 8;
+            int paddleSpeed = 10;
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
-            int ballX = this.Width / 2 - 10;
             int ballSize = 20;
-            int ballY = this.Height - paddle.height - 80 - ballSize;
+            int ballX = paddle.x + paddleWidth / 2 - ballSize / 2;
+            int ballY = paddle.y - ballSize - 2;
 
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            double speedMultiplier = 1.4; // speed multiplier for ball speed -> still buggy for values > 1. 
+            double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
@@ -105,10 +112,13 @@ namespace BrickBreaker
                 blocks.Add(b1);
             }
 
+            blocks.Clear();
+            LoadBlocks();
+
             #endregion
 
             // start the game engine loop
-            gameTimer.Enabled = true;
+            gameTimer.Enabled = false;
         }
 
         public void LFischStart()
@@ -116,7 +126,7 @@ namespace BrickBreaker
             gameSound.Play();
 
             lifeLabel.Text = $"{lives}";
-            string fontFilePath; 
+            string fontFilePath;
             PrivateFontCollection font = new PrivateFontCollection();
             byte[] fontData = Properties.Resources.DynaPuff_VariableFont_wdth_wght;
             IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
@@ -161,6 +171,12 @@ namespace BrickBreaker
                 case Keys.Space:
                     spacebar = true;
                     gameTimer.Enabled = true; // start the game timer
+                        break;
+                case Keys.Escape:
+                    OnEnd();
+                    break;
+                case Keys.Tab:
+                    gameTimer.Enabled = !gameTimer.Enabled;
                     break;
                 default:
                     break;
@@ -201,8 +217,10 @@ namespace BrickBreaker
             // Move ball
             ball.Move();
 
-            // update ball color
+            // Update ball color
+            //ball.SetBallColor();  // externally modified
             ballBrush = new SolidBrush(ballColor);
+
 
             // Check for collision with top and side walls
             ball.WallCollision(this);
@@ -216,9 +234,10 @@ namespace BrickBreaker
                 ball.x = ((paddle.x - (ball.size / 2)) + (paddle.width / 2));
                 ball.y = (this.Height - paddle.height) - 85;
 
+                gameTimer.Enabled = false;
+
                 if (lives == 0)
                 {
-                    gameTimer.Enabled = false;
                     OnEnd();
                 }
             }
@@ -286,7 +305,31 @@ namespace BrickBreaker
             // Draws blocks
             foreach (Block b in blocks)
             {
-                e.Graphics.FillRectangle(blockBrush, b.x, b.y, b.width, b.height);
+                Rectangle recNumber = new Rectangle(b.x, b.y, b.width, b.height);
+
+                switch (b.hp)
+                {
+                    case 1:
+                        e.Graphics.FillRectangle(redBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 2:
+                        e.Graphics.FillRectangle(blueBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 3:
+                        e.Graphics.FillRectangle(greenBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 4:
+                        e.Graphics.FillRectangle(blockBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    default:
+                        e.Graphics.FillRectangle(blockBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                }
             }
 
             // Draws ball
@@ -295,6 +338,38 @@ namespace BrickBreaker
             foreach (Powerup p in powerups)
             {
                 p.Draw(e.Graphics);
+            }
+        }
+
+        private void LoadBlocks()
+        {
+            string newX, newY, newHp, newColour;
+
+            //Open the XML file and place it in reader 
+            XmlReader reader = XmlReader.Create($"{currentLevel}.xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Text)
+
+                {
+                    newX = reader.ReadString();
+                    int blockX = Convert.ToInt32(newX);
+
+                    reader.ReadToNextSibling("y");
+                    newY = reader.ReadString();
+                    int blockY = Convert.ToInt32(newY);
+
+                    reader.ReadToNextSibling("hp");
+                    newHp = reader.ReadString();
+                    int blockHp = Convert.ToInt32(newHp);
+
+                    reader.ReadToNextSibling("colour");
+                    newColour = reader.ReadString();
+                    Color blockColour = Color.FromName(newColour); // potential error source later on
+
+                    Block b = new Block(blockX, blockY, blockHp, blockColour);
+                    blocks.Add(b);
+                }
             }
         }
     }
