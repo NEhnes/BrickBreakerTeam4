@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Media;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace BrickBreaker
 {
@@ -45,22 +46,29 @@ namespace BrickBreaker
         List<Powerup> powerups = new List<Powerup>();
         Random rand = new Random();
 
+        SoundPlayer popPlayer = new SoundPlayer(Properties.Resources.popSound);
+        System.Windows.Media.MediaPlayer gameSound = new System.Windows.Media.MediaPlayer();
+
         #endregion
 
         public GameScreen()
         {
             InitializeComponent();
             OnStart();
+
+            gameSound.Open(new Uri(Application.StartupPath + "/Resources/backMusic.wav"));
+            gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
         }
 
 
         public void OnStart()
         {
-            LFischStart();
 
             //set life counter
             lives = 3;
 
+            // run opening UI and UX code
+            LFischStart();
             //set all button presses to false.
             leftArrowDown = rightArrowDown = false;
 
@@ -105,6 +113,8 @@ namespace BrickBreaker
 
         public void LFischStart()
         {
+            gameSound.Play();
+
             lifeLabel.Text = $"{lives}";
             string fontFilePath; 
             PrivateFontCollection font = new PrivateFontCollection();
@@ -129,6 +139,12 @@ namespace BrickBreaker
             {
                 BackgroundImage = Properties.Resources.SpecImage2;
             }
+        }
+
+        private void gameSound_MediaEnded(object sender, EventArgs e)
+        {
+            gameSound.Stop();
+            gameSound.Play();
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -216,6 +232,8 @@ namespace BrickBreaker
                 if (ball.BlockCollision(b))
                 {
                     blocks.Remove(b);
+
+                    popPlayer.Play();
 
                     if (blocks.Count == 0)
                     {

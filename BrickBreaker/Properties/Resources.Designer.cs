@@ -61,6 +61,15 @@ namespace BrickBreaker.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream backMusic {
+            get {
+                return ResourceManager.GetStream("backMusic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap BasicImage {
@@ -77,6 +86,15 @@ namespace BrickBreaker.Properties {
             get {
                 object obj = ResourceManager.GetObject("DynaPuff_VariableFont_wdth_wght", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream popSound {
+            get {
+                return ResourceManager.GetStream("popSound", resourceCulture);
             }
         }
         
