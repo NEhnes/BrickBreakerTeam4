@@ -195,7 +195,9 @@
     <None Include="Level1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Level2.xml" />
+    <None Include="Level2.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Level1.xml.bmp" />
     <None Include="Resources\THIS_ONE.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

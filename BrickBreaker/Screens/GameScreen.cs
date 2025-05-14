@@ -1,6 +1,6 @@
-﻿/*  Created by: 
+﻿/*  Created by: Liam, Sean, Nathan, Aaron
  *  Project: Brick Breaker
- *  Date: 
+ *  Date: May '25
  */ 
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace BrickBreaker
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
-        string currentLevel = "Level1";
+        string currentLevel = "Level2";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
@@ -76,7 +76,7 @@ namespace BrickBreaker
             int paddleHeight = 20;
             int paddleX = ((this.Width / 2) - (paddleWidth / 2));
             int paddleY = (this.Height - paddleHeight) - 60;
-            int paddleSpeed = 8;
+            int paddleSpeed = 10;
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
@@ -155,7 +155,7 @@ namespace BrickBreaker
                 case Keys.Space:
                     spacebar = true;
                     gameTimer.Enabled = true; // start the game timer
-                    break;
+                        break;
                 default:
                     break;
             }
@@ -195,8 +195,8 @@ namespace BrickBreaker
             // Move ball
             ball.Move();
 
-            // update ball color
-            ball.SetBallColor();
+            // Update ball color
+            //ball.SetBallColor();  // externally modified
             ballBrush = new SolidBrush(ballColor);
 
 
@@ -212,9 +212,10 @@ namespace BrickBreaker
                 ball.x = ((paddle.x - (ball.size / 2)) + (paddle.width / 2));
                 ball.y = (this.Height - paddle.height) - 85;
 
+                gameTimer.Enabled = false;
+
                 if (lives == 0)
                 {
-                    gameTimer.Enabled = false;
                     OnEnd();
                 }
             }
