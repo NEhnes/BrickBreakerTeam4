@@ -39,7 +39,7 @@ namespace BrickBreaker
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
-        string currentLevel = "Level2";
+        string currentLevel = "Level1";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
