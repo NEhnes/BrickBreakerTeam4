@@ -1,6 +1,6 @@
-﻿/*  Created by: 
+﻿/*  Created by: Liam, Sean, Nathan, Aaron
  *  Project: Brick Breaker
- *  Date: 
+ *  Date: May '25
  */ 
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Xml;
+using System.Runtime.CompilerServices;
 
 namespace BrickBreaker
 {
@@ -20,7 +25,7 @@ namespace BrickBreaker
         #region global values
 
         //player1 button control keys - DO NOT CHANGE
-        Boolean leftArrowDown, rightArrowDown;
+        Boolean leftArrowDown, rightArrowDown, spacebar;
 
         // Game values
         int lives;
@@ -28,18 +33,28 @@ namespace BrickBreaker
         // Paddle and Ball objects
         Paddle paddle;
         Ball ball;
-        
+
+        // Ball Colour
+        public static Color ballColor = Color.White;
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
+        string currentLevel = "Level1";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
-        SolidBrush ballBrush = new SolidBrush(Color.White);
+        SolidBrush ballBrush = new SolidBrush(ballColor);
         SolidBrush blockBrush = new SolidBrush(Color.Red);
+        SolidBrush redBrush = new SolidBrush(Color.Red);
+        SolidBrush blueBrush = new SolidBrush(Color.Blue);
+        SolidBrush greenBrush = new SolidBrush(Color.Green);
+
 
         List<Powerup> powerups = new List<Powerup>();
         Random rand = new Random();
+
+        SoundPlayer popPlayer = new SoundPlayer(Properties.Resources.popSound);
+        System.Windows.Media.MediaPlayer gameSound = new System.Windows.Media.MediaPlayer();
 
         #endregion
 
@@ -47,14 +62,20 @@ namespace BrickBreaker
         {
             InitializeComponent();
             OnStart();
+
+            gameSound.Open(new Uri(Application.StartupPath + "/Resources/backMusic.wav"));
+            gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
         }
 
 
         public void OnStart()
         {
+
             //set life counter
             lives = 3;
 
+            // run opening UI and UX code
+            LFischStart();
             //set all button presses to false.
             leftArrowDown = rightArrowDown = false;
 
@@ -63,13 +84,13 @@ namespace BrickBreaker
             int paddleHeight = 20;
             int paddleX = ((this.Width / 2) - (paddleWidth / 2));
             int paddleY = (this.Height - paddleHeight) - 60;
-            int paddleSpeed = 8;
+            int paddleSpeed = 10;
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
-            int ballX = this.Width / 2 - 10;
             int ballSize = 20;
-            int ballY = this.Height - paddle.height - 80 - ballSize;
+            int ballX = paddle.x + paddleWidth / 2 - ballSize / 2;
+            int ballY = paddle.y - ballSize - 2;
 
             // Creates a new ball
             int xSpeed = 6;
@@ -78,9 +99,9 @@ namespace BrickBreaker
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
-            
+
             //TODO - replace all the code in this region eventually with code that loads levels from xml files
-            
+
             blocks.Clear();
             int x = 10;
 
@@ -91,15 +112,49 @@ namespace BrickBreaker
                 blocks.Add(b1);
             }
 
+            blocks.Clear();
+            LoadBlocks();
+
             #endregion
 
             // start the game engine loop
-            gameTimer.Enabled = true;
+            gameTimer.Enabled = false;
         }
 
         public void LFischStart()
         {
-            //BackgroundImage = Properties.Resources.basicImage
+            gameSound.Play();
+
+            lifeLabel.Text = $"{lives}";
+            string fontFilePath;
+            PrivateFontCollection font = new PrivateFontCollection();
+            byte[] fontData = Properties.Resources.DynaPuff_VariableFont_wdth_wght;
+            IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            font.AddMemoryFont(fontPtr, fontData.Length);
+
+            Random randBG = new Random();
+
+            int backImg = randBG.Next(1, 11);
+
+            if (backImg <= 8)
+            {
+                BackgroundImage = Properties.Resources.BasicImage;
+            }
+            else if (backImg == 9)
+            {
+                BackgroundImage = Properties.Resources.SpecImage1;
+            }
+            else
+            {
+                BackgroundImage = Properties.Resources.SpecImage2;
+            }
+        }
+
+        private void gameSound_MediaEnded(object sender, EventArgs e)
+        {
+            gameSound.Stop();
+            gameSound.Play();
         }
 
         private void GameScreen_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -112,6 +167,16 @@ namespace BrickBreaker
                     break;
                 case Keys.Right:
                     rightArrowDown = true;
+                    break;
+                case Keys.Space:
+                    spacebar = true;
+                    gameTimer.Enabled = true; // start the game timer
+                        break;
+                case Keys.Escape:
+                    OnEnd();
+                    break;
+                case Keys.Tab:
+                    gameTimer.Enabled = !gameTimer.Enabled;
                     break;
                 default:
                     break;
@@ -128,6 +193,9 @@ namespace BrickBreaker
                     break;
                 case Keys.Right:
                     rightArrowDown = false;
+                    break;
+                case Keys.Space:
+                    spacebar = false;
                     break;
                 default:
                     break;
@@ -149,6 +217,11 @@ namespace BrickBreaker
             // Move ball
             ball.Move();
 
+            // Update ball color
+            //ball.SetBallColor();  // externally modified
+            ballBrush = new SolidBrush(ballColor);
+
+
             // Check for collision with top and side walls
             ball.WallCollision(this);
 
@@ -161,9 +234,10 @@ namespace BrickBreaker
                 ball.x = ((paddle.x - (ball.size / 2)) + (paddle.width / 2));
                 ball.y = (this.Height - paddle.height) - 85;
 
+                gameTimer.Enabled = false;
+
                 if (lives == 0)
                 {
-                    gameTimer.Enabled = false;
                     OnEnd();
                 }
             }
@@ -177,6 +251,8 @@ namespace BrickBreaker
                 if (ball.BlockCollision(b))
                 {
                     blocks.Remove(b);
+
+                    popPlayer.Play();
 
                     if (blocks.Count == 0)
                     {
@@ -213,7 +289,7 @@ namespace BrickBreaker
             // Goes to the game over screen
             Form form = this.FindForm();
             MenuScreen ps = new MenuScreen();
-            
+
             ps.Location = new Point((form.Width - ps.Width) / 2, (form.Height - ps.Height) / 2);
 
             form.Controls.Add(ps);
@@ -234,7 +310,31 @@ namespace BrickBreaker
             // Draws blocks
             foreach (Block b in blocks)
             {
-                e.Graphics.FillRectangle(blockBrush, b.x, b.y, b.width, b.height);
+                Rectangle recNumber = new Rectangle(b.x, b.y, b.width, b.height);
+
+                switch (b.hp)
+                {
+                    case 1:
+                        e.Graphics.FillRectangle(redBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 2:
+                        e.Graphics.FillRectangle(blueBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 3:
+                        e.Graphics.FillRectangle(greenBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    case 4:
+                        e.Graphics.FillRectangle(blockBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                    default:
+                        e.Graphics.FillRectangle(blockBrush, recNumber);
+                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                        break;
+                }
             }
 
             // Draws ball
@@ -243,6 +343,38 @@ namespace BrickBreaker
             foreach (Powerup p in powerups)
             {
                 p.Draw(e.Graphics);
+            }
+        }
+
+        private void LoadBlocks()
+        {
+            string newX, newY, newHp, newColour;
+
+            //Open the XML file and place it in reader 
+            XmlReader reader = XmlReader.Create($"{currentLevel}.xml");
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Text)
+
+                {
+                    newX = reader.ReadString();
+                    int blockX = Convert.ToInt32(newX);
+
+                    reader.ReadToNextSibling("y");
+                    newY = reader.ReadString();
+                    int blockY = Convert.ToInt32(newY);
+
+                    reader.ReadToNextSibling("hp");
+                    newHp = reader.ReadString();
+                    int blockHp = Convert.ToInt32(newHp);
+
+                    reader.ReadToNextSibling("colour");
+                    newColour = reader.ReadString();
+                    Color blockColour = Color.FromName(newColour); // potential error source later on
+
+                    Block b = new Block(blockX, blockY, blockHp, blockColour);
+                    blocks.Add(b);
+                }
             }
         }
     }

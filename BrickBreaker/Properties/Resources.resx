@@ -117,4 +117,56 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="backMusic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\audiomass-output.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="BasicImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Screenshot 2025-05-05 134512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DynaPuff_VariableFont_wdth_wght" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\DynaPuff-VariableFont_wdth,wght.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="popSound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\popSound.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SpecImage1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Screenshot 2025-04-30 144138.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpecImage2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\undersea-volcano-eruption-380x230.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="THIS_ONE" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        vCDnnCKHPdQibWIOhKysJBYFwxSWbp8Bo//Z
+</value>
+  </data>
+  <data name="wavesPic" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Screenshot 2025-05-07 143257.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
