@@ -84,7 +84,7 @@ namespace BrickBreaker
             int paddleHeight = 20;
             int paddleX = ((this.Width / 2) - (paddleWidth / 2));
             int paddleY = (this.Height - paddleHeight) - 60;
-            int paddleSpeed = 10;
+            int paddleSpeed = 15;
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
@@ -95,7 +95,7 @@ namespace BrickBreaker
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            double speedMultiplier = 1; // speed multiplier for ball speed -> still buggy for values > 1. 
+            double speedMultiplier = 0.8; // speed multiplier for ball speed -> still buggy for values > 1. 
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
@@ -217,9 +217,7 @@ namespace BrickBreaker
             // Move ball
             ball.Move();
 
-            // Update ball color
-            //ball.SetBallColor();  // externally modified
-            ballBrush = new SolidBrush(ballColor);
+            
 
 
             // Check for collision with top and side walls
@@ -273,6 +271,9 @@ namespace BrickBreaker
                     break;
                 }
             }
+
+            // Update ball color
+            ballBrush = new SolidBrush(ballColor);
 
 
             foreach (Powerup p in powerups)

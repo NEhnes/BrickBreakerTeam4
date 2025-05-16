@@ -15,7 +15,7 @@ namespace BrickBreaker
 
         public static Random rand = new Random();
         public double speedMultiplier;
-        private Color[] colorCycle = {Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Indigo, Color.MediumPurple};
+        private Color[] colorCycle = {Color.DeepPink, Color.Black, Color.White};
         private int moveCounter = 0;
         private int colorIndex = 0;
 
@@ -32,14 +32,11 @@ namespace BrickBreaker
 
         public void Move()
         {
-            x =  (int)(x + xSpeed * speedMultiplier);
+            x = (int)(x + xSpeed * speedMultiplier);
             y = (int)(y + ySpeed * speedMultiplier);
-            
-                moveCounter++;
-            if (moveCounter > 100)
-            {
-                moveCounter = 0;
-            }
+
+            moveCounter++;
+            if (moveCounter > 100) moveCounter = 0;
         }
 
         public bool BlockCollision(Block b) // fixed :)
@@ -49,6 +46,8 @@ namespace BrickBreaker
 
             if (ballRec.IntersectsWith(blockRec))
             {
+                CycleBallColor();
+
                 Rectangle intersection = Rectangle.Intersect(ballRec, blockRec); // get the intersection rectangle
 
                 if (intersection.Width > intersection.Height) // if the intersection is wider than it is tall
@@ -79,6 +78,7 @@ namespace BrickBreaker
 
             if (ballRec.IntersectsWith(paddleRec) && !lastHitPaddle)
             {
+                CycleBallColor();
 
                 Rectangle intersection = Rectangle.Intersect(ballRec, paddleRec);
 
@@ -90,6 +90,8 @@ namespace BrickBreaker
 
                     // 6 cases to determine ball deflection
                     int maxWidth = p.width + size; // added for compatability with various paddle sizes
+
+                    y = p.y - size; // move ball to top of paddle
 
                     if (measuredContactPoint < 0.2 * maxWidth)
                     {
@@ -124,10 +126,11 @@ namespace BrickBreaker
                 }
                 else // side contact
                 {
-                    // if top or bottom
-                    xSpeed *= -1;
+                    y = p.y + size; //move ball to bottom of paddle
+
+                    xSpeed *= -1; // bounce off side
                 }
-                lastHitPaddle = true; 
+                lastHitPaddle = true;
             }
         }
 
@@ -136,18 +139,21 @@ namespace BrickBreaker
             // Collision with left wall
             if (x <= 0)
             {
+                CycleBallColor();
                 x = 0;
                 xSpeed *= -1;
             }
             // Collision with right wall
             if (x >= (UC.Width - size))
             {
+                CycleBallColor();
                 x = UC.Width - size;
                 xSpeed *= -1;
             }
             // Collision with top wall
             if (y <= 2)
             {
+                CycleBallColor();
                 y = 2;
                 ySpeed *= -1;
             }
@@ -155,7 +161,7 @@ namespace BrickBreaker
         }
 
         public bool BottomCollision(UserControl UC) // good as far as can tell
-        {
+        { 
             Boolean didCollide = false;
 
             if (y >= UC.Height)
@@ -176,17 +182,11 @@ namespace BrickBreaker
 
         }
 
-        public void SetBallColor()
+        public void CycleBallColor()
         {
-            if (moveCounter % 50 == 0)
-            {
-                GameScreen.ballColor = colorCycle[colorIndex];
-                colorIndex++;
-                if (colorIndex >= colorCycle.Length)
-                {
-                    colorIndex = 0;
-                }
-            }
+            GameScreen.ballColor = colorCycle[colorIndex];
+            colorIndex++;
+            if (colorIndex == colorCycle.Length) { colorIndex = 0; };
         }
     }
 }
