@@ -63,8 +63,6 @@ namespace BrickBreaker
             InitializeComponent();
             OnStart();
 
-            gameSound.Open(new Uri(Application.StartupPath + "/Resources/backMusic.wav"));
-            gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
         }
 
 
@@ -76,6 +74,7 @@ namespace BrickBreaker
 
             // run opening UI and UX code
             LFischStart();
+
             //set all button presses to false.
             leftArrowDown = rightArrowDown = false;
 
@@ -119,13 +118,16 @@ namespace BrickBreaker
 
             // start the game engine loop
             gameTimer.Enabled = false;
+
+            gameSound.Open(new Uri(Application.StartupPath + "/Resources/audiomass-output.mp3"));
+            gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
+            gameSound.Play();
         }
 
         public void LFischStart()
         {
-            gameSound.Play();
+           // gameSound.Play();
 
-            lifeLabel.Text = $"{lives}";
             string fontFilePath;
             PrivateFontCollection font = new PrivateFontCollection();
             byte[] fontData = Properties.Resources.DynaPuff_VariableFont_wdth_wght;
@@ -204,6 +206,8 @@ namespace BrickBreaker
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            lifeLabel.Text = $"{lives}";
+
             // Move the paddle
             if (leftArrowDown && paddle.x > 0)
             {
@@ -286,9 +290,11 @@ namespace BrickBreaker
 
         public void OnEnd()
         {
+            gameSound.Close();
+
             // Goes to the game over screen
             Form form = this.FindForm();
-            MenuScreen ps = new MenuScreen();
+            Screens.EndScreenL ps = new Screens.EndScreenL();
 
             ps.Location = new Point((form.Width - ps.Width) / 2, (form.Height - ps.Height) / 2);
 
