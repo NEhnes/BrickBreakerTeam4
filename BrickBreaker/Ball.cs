@@ -172,6 +172,10 @@ namespace BrickBreaker
             return didCollide;
         }
 
+        public void PowerupCollision()
+        {
+        }
+
         public static double Map (double value, double fromMin, double fromMax, double newMin, double newMax)
         {
             return (value - fromMin) * (newMax - newMin) / (fromMax - fromMin) + newMin;
