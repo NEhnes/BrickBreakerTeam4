@@ -49,10 +49,21 @@ namespace BrickBreaker
         SolidBrush blueBrush = new SolidBrush(Color.Blue);
         SolidBrush greenBrush = new SolidBrush(Color.Green);
 
-
+        // Powerup management and creation
         List<Powerup> powerups = new List<Powerup>();
+        List<Powerup> activePowerups = new List<Powerup>();
         Random rand = new Random();
 
+        // Powerup duration
+        int powerupTime = 5000; //5s life
+        Timer SpeedBoostTimer = new Timer();
+        Timer BigPaddleTimer = new Timer();
+        Timer SpeedReductionTimer = new Timer();
+        Timer BulletTimer = new Timer();
+
+
+
+        // Game Sounds
         SoundPlayer popPlayer = new SoundPlayer(Properties.Resources.popSound);
         System.Windows.Media.MediaPlayer gameSound = new System.Windows.Media.MediaPlayer();
 
@@ -78,12 +89,18 @@ namespace BrickBreaker
             //set all button presses to false.
             leftArrowDown = rightArrowDown = false;
 
+            // set up powerup lifespans 
+            SpeedBoostTimer.Interval = powerupTime;
+            BigPaddleTimer.Interval = powerupTime;
+            SpeedReductionTimer.Interval = powerupTime;
+            BulletTimer.Interval = powerupTime;
+
             // setup starting paddle values and create paddle object
             int paddleWidth = 80;
             int paddleHeight = 20;
             int paddleX = ((this.Width / 2) - (paddleWidth / 2));
             int paddleY = (this.Height - paddleHeight) - 60;
-            int paddleSpeed = 15;
+            int paddleSpeed = 12;
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
@@ -94,22 +111,12 @@ namespace BrickBreaker
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            double speedMultiplier = 0.8; // speed multiplier for ball speed -> still buggy for values > 1. 
-            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
+            double speedMultiplier = 1.2; // speed multiplier for ball speed -> still buggy for values > 1. 
+            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added speed parameter
 
             #region Creates blocks for generic level. Need to replace with code that loads levels.
 
             //TODO - replace all the code in this region eventually with code that loads levels from xml files
-
-            blocks.Clear();
-            int x = 10;
-
-            while (blocks.Count < 12)
-            {
-                x += 57;
-                Block b1 = new Block(x, 10, 1, Color.White);
-                blocks.Add(b1);
-            }
 
             blocks.Clear();
             LoadBlocks();
@@ -262,7 +269,7 @@ namespace BrickBreaker
                         OnEnd();
                     }
                     // Block was hit — now spawn a powerup
-                    if (rand.Next(0, 100) < 25) // 20% chance
+                    if (rand.Next(0, 100) < 100) // 20% chance //EDITED FOR TESTING
                     {
                         string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
                         string type = types[rand.Next(types.Length)];
@@ -284,6 +291,8 @@ namespace BrickBreaker
             {
                 p.Move();
             }
+
+            PowerupCollision();
 
             //redraw the screen
             Refresh();
@@ -308,6 +317,16 @@ namespace BrickBreaker
             // Draws paddle
             paddleBrush.Color = paddle.colour;
             e.Graphics.FillRectangle(paddleBrush, paddle.x, paddle.y, paddle.width, paddle.height);
+
+            // Draw collected powerups as squares in top right
+            int collectedX = 650;
+            int collectedY = 20;
+            foreach (Powerup p in activePowerups)
+            {
+                collectedX += 30;
+                Rectangle powerupRect = new Rectangle(collectedX, collectedY, p.size, p.size);
+                e.Graphics.FillRectangle(p.brush, powerupRect);
+            }
 
             // Draws blocks
             foreach (Block b in blocks)
@@ -376,6 +395,49 @@ namespace BrickBreaker
 
                     Block b = new Block(blockX, blockY, blockHp, blockColour);
                     blocks.Add(b);
+                }
+            }
+        }
+
+        /* creates a separate list for deleting elements
+         * deleting elements while iterating gives enumeration error
+         * POWERUPS ARE REMOVED FROM SCREEN AND ADDED INTO "activePowerups" LIST
+         */
+        private void PowerupCollision()
+        {
+            List<Powerup> deleteList = new List<Powerup>();
+            foreach (Powerup p in powerups)
+            {
+                Rectangle powerupRec = new Rectangle(p.x, p.y, p.size, p.size);
+                Rectangle paddleRec = new Rectangle(paddle.x, paddle.y, paddle.width, paddle.height);
+
+                if (powerupRec.IntersectsWith(paddleRec))
+                {
+                    deleteList.Add(p);
+                }
+            }
+
+            foreach (Powerup p in deleteList) 
+            {
+                activePowerups.Add(p);
+                powerups.Remove(p);
+
+                switch (p.type)
+                {
+                    case "SpeedBoost":
+                        SpeedBoostTimer.Start();
+                        break;
+                    case "BigPaddle":
+                        BigPaddleTimer.Start();
+                        break;
+                    case "SpeedReduction":
+                        SpeedReductionTimer.Start();
+                        break;
+                    case "Bullet":
+                        BulletTimer.Start();
+                        break;
+                    default:
+                        break;
                 }
             }
         }
