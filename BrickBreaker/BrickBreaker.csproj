@@ -84,6 +84,12 @@
     <Compile Include="Screens\Credits.Designer.cs">
       <DependentUpon>Credits.cs</DependentUpon>
     </Compile>
+    <Compile Include="Screens\EndScreenL.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Screens\EndScreenL.Designer.cs">
+      <DependentUpon>EndScreenL.cs</DependentUpon>
+    </Compile>
     <Compile Include="Screens\MenuScreenD.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     </Compile>
     <EmbeddedResource Include="Screens\Credits.resx">
       <DependentUpon>Credits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\EndScreenL.resx">
+      <DependentUpon>EndScreenL.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\MenuScreenD.resx">
       <DependentUpon>MenuScreenD.cs</DependentUpon>
@@ -191,9 +200,6 @@
     <None Include="Resources\Screenshot 2025-05-07 143257.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\audiomass-output.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\popSound.wav" />
     <None Include="Resources\Level1.txt" />
   </ItemGroup>
@@ -231,6 +237,17 @@
     <Content Include="Level3.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\audiomass-output.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\seaweed.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\seaweed-removebg-preview.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

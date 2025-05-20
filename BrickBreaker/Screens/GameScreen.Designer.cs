@@ -1,4 +1,4 @@
-﻿namespace BrickBreaker
+namespace BrickBreaker
 {
     partial class GameScreen
     {
@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.lifeLabel = new System.Windows.Forms.Label();
+            this.piercingTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // gameTimer
@@ -47,9 +48,13 @@
             this.lifeLabel.ForeColor = System.Drawing.Color.White;
             this.lifeLabel.Location = new System.Drawing.Point(14, 637);
             this.lifeLabel.Name = "lifeLabel";
-            this.lifeLabel.Size = new System.Drawing.Size(68, 29);
+            this.lifeLabel.Size = new System.Drawing.Size(67, 29);
             this.lifeLabel.TabIndex = 0;
             this.lifeLabel.Text = "lives";
+            // 
+            // piercingTimer
+            // 
+            this.piercingTimer.Enabled = true;
             // 
             // GameScreen
             // 
@@ -74,5 +79,6 @@
 
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Label lifeLabel;
+        private System.Windows.Forms.Timer piercingTimer;
     }
 }

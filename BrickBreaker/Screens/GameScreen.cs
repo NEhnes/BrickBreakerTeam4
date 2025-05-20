@@ -1,4 +1,4 @@
-﻿/*  Created by: Liam, Sean, Nathan, Aaron
+/*  Created by: Liam, Sean, Nathan, Aaron
  *  Project: Brick Breaker
  *  Date: May '25
  */ 
@@ -17,15 +17,18 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Xml;
 using System.Runtime.CompilerServices;
+using System.Timers;
 
 namespace BrickBreaker
 {
     public partial class GameScreen : UserControl
     {
         #region global values
+        bool piercingBall = false;
+      
 
         //player1 button control keys - DO NOT CHANGE
-        Boolean leftArrowDown, rightArrowDown, spacebar;
+        Boolean leftArrowDown, rightArrowDown;
 
         // Game values
         int lives;
@@ -34,21 +37,33 @@ namespace BrickBreaker
         Paddle paddle;
         Ball ball;
 
+        // Ball speed multiplier
+        public static double speedMultiplier = 1.2;
+
         // Ball Colour
         public static Color ballColor = Color.White;
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
-        string currentLevel = "Level1";
+        string currentLevel = "Level2";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
         SolidBrush ballBrush = new SolidBrush(ballColor);
 
-
+        // Powerup management and random object
         List<Powerup> powerups = new List<Powerup>();
+        List<Powerup> activePowerups = new List<Powerup>();
         Random rand = new Random();
 
+        // Powerup duration & timers
+        private static int powerupTime = 5000; //5s life by default
+        private static System.Timers.Timer SpeedBoostTimer = new System.Timers.Timer(powerupTime);
+        private static System.Timers.Timer BigPaddleTimer = new System.Timers.Timer(powerupTime);
+        private static System.Timers.Timer SpeedReductionTimer = new System.Timers.Timer(powerupTime);
+        private static System.Timers.Timer BulletTimer = new System.Timers.Timer(powerupTime);
+
+        // Game Sounds
         SoundPlayer popPlayer = new SoundPlayer(Properties.Resources.popSound);
         System.Windows.Media.MediaPlayer gameSound = new System.Windows.Media.MediaPlayer();
 
@@ -60,28 +75,34 @@ namespace BrickBreaker
             OnStart();
             LoadBlocks();
 
-            gameSound.Open(new Uri(Application.StartupPath + "/Resources/backMusic.wav"));
-            gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
         }
 
 
         public void OnStart()
         {
+            InitPowerupTimers(); // add event handlers for timers
 
             //set life counter
             lives = 3;
 
             // run opening UI and UX code
             LFischStart();
+
             //set all button presses to false.
             leftArrowDown = rightArrowDown = false;
+
+            // set up powerup lifespans 
+            SpeedBoostTimer.Interval = powerupTime;
+            BigPaddleTimer.Interval = powerupTime;
+            SpeedReductionTimer.Interval = powerupTime;
+            BulletTimer.Interval = powerupTime;
 
             // setup starting paddle values and create paddle object
             int paddleWidth = 80;
             int paddleHeight = 20;
             int paddleX = ((this.Width / 2) - (paddleWidth / 2));
             int paddleY = (this.Height - paddleHeight) - 60;
-            int paddleSpeed = 15;
+            int paddleSpeed = 12;
             paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight, paddleSpeed, Color.White);
 
             // setup starting ball values
@@ -92,15 +113,29 @@ namespace BrickBreaker
             // Creates a new ball
             int xSpeed = 6;
             int ySpeed = 6;
-            double speedMultiplier = 0.8; // speed multiplier for ball speed -> still buggy for values > 1. 
-            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
+            ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added speed parameter
+
+            #region Creates blocks for generic level. Need to replace with code that loads levels.
+
+            //TODO - replace all the code in this region eventually with code that loads levels from xml files
+
+            blocks.Clear();
+            LoadBlocks();
+
+            #endregion
+
+            // start the game engine loop
+            gameTimer.Enabled = false;
+
+            gameSound.Open(new Uri(Application.StartupPath + "/Resources/audiomass-output.mp3"));
+            gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
+            gameSound.Play();
         }
 
         public void LFischStart()
         {
-            gameSound.Play();
+            // gameSound.Play();
 
-            lifeLabel.Text = $"{lives}";
             string fontFilePath;
             PrivateFontCollection font = new PrivateFontCollection();
             byte[] fontData = Properties.Resources.DynaPuff_VariableFont_wdth_wght;
@@ -144,14 +179,13 @@ namespace BrickBreaker
                     rightArrowDown = true;
                     break;
                 case Keys.Space:
-                    spacebar = true;
                     gameTimer.Enabled = true; // start the game timer
-                        break;
+                    break;
                 case Keys.Escape:
                     OnEnd();
                     break;
                 case Keys.Tab:
-                    gameTimer.Enabled = !gameTimer.Enabled;
+                    gameTimer.Enabled = !gameTimer.Enabled;  // pause game -- TODO: pause powerup timers
                     break;
                 default:
                     break;
@@ -170,7 +204,6 @@ namespace BrickBreaker
                     rightArrowDown = false;
                     break;
                 case Keys.Space:
-                    spacebar = false;
                     break;
                 default:
                     break;
@@ -179,6 +212,8 @@ namespace BrickBreaker
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            lifeLabel.Text = $"{lives}";
+
             // Move the paddle
             if (leftArrowDown && paddle.x > 0)
             {
@@ -192,7 +227,7 @@ namespace BrickBreaker
             // Move ball
             ball.Move();
 
-            
+
 
 
             // Check for collision with top and side walls
@@ -233,9 +268,9 @@ namespace BrickBreaker
                         OnEnd();
                     }
                     // Block was hit — now spawn a powerup
-                    if (rand.Next(0, 100) < 25) // 20% chance
+                    if (rand.Next(0, 100) < 25) // 25% chance
                     {
-                        string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
+                        string[] types = { "ExtraLife", "SpeedBoost", "SpeedReduction", "BigPaddle", "BulletBoost" };
                         string type = types[rand.Next(types.Length)];
 
                         Powerup newPowerup = new Powerup(b.x, b.y, type);
@@ -246,15 +281,34 @@ namespace BrickBreaker
                     break;
                 }
             }
+            Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
+            for (int i = blocks.Count - 1; i >= 0; i--)
+            {
+                Block b = blocks[i];
+                Rectangle blockRect = new Rectangle(b.x, b.y, b.width, b.height);
 
+                if (ballRect.IntersectsWith(blockRect))
+                {
+                    blocks.RemoveAt(i);
+
+                    if (!piercingBall)
+                    {
+                        // Reverse ball direction if not piercing
+                        ball.speedMultiplier *= -1;
+                        break; // Exit loop so only one block is hit
+                    }
+                    // If piercing, no bounce and continue checking next block
+                }
+            }
             // Update ball color
             ballBrush = new SolidBrush(ballColor);
-
 
             foreach (Powerup p in powerups)
             {
                 p.Move();
             }
+
+            PowerupCollision();
 
             //redraw the screen
             Refresh();
@@ -262,9 +316,11 @@ namespace BrickBreaker
 
         public void OnEnd()
         {
+            gameSound.Close();
+
             // Goes to the game over screen
             Form form = this.FindForm();
-            MenuScreen ps = new MenuScreen();
+            Screens.EndScreenL ps = new Screens.EndScreenL();
 
             ps.Location = new Point((form.Width - ps.Width) / 2, (form.Height - ps.Height) / 2);
 
@@ -277,6 +333,16 @@ namespace BrickBreaker
             // Draws paddle
             paddleBrush.Color = paddle.colour;
             e.Graphics.FillRectangle(paddleBrush, paddle.x, paddle.y, paddle.width, paddle.height);
+
+            // Draw collected powerups as squares in top right
+            int collectedX = 850;
+            int collectedY = 20;
+            foreach (Powerup p in activePowerups)
+            {
+                collectedX -= 30;
+                Rectangle powerupRect = new Rectangle(collectedX, collectedY, p.size, p.size);
+                e.Graphics.FillRectangle(p.brush, powerupRect);
+            }
 
             // Draws blocks
             foreach (Block b in blocks)
@@ -313,6 +379,34 @@ namespace BrickBreaker
                 p.Draw(e.Graphics);
             }
         }
+        
+        private void ApplyPowerup(string type)
+        {
+            switch (type)
+            {
+                case "ExtraLife":
+                    lives++; // Assuming you have a 'lives' variable
+                    break;
+                case "SpeedBoost":
+                    ball.speedMultiplier += 2; // Assuming you have a 'ballSpeed' or similar
+                    break;
+                case "BigPaddle":
+                    paddle.width += 40; // Temporarily increase paddle size
+                    break;
+                case "SpeedReduction":
+                    ball.speedMultiplier = Math.Max(2, ball.speedMultiplier - 2); // Don't go below 2
+                    break;
+                case "BulletBoost":
+                    piercingBall = true;
+
+                    // Start a timer to turn it off after 5 seconds
+                    piercingTimer.Interval = 5000;
+                    piercingTimer.Tick += (s, e) =>
+                    {
+                        piercingBall = false;
+                        piercingTimer.Stop();
+                    };
+                    piercingTimer.Start();
 
         private void LoadBlocks()
         {
