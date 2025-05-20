@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.gameTimer = new System.Windows.Forms.Timer(this.components);
             this.lifeLabel = new System.Windows.Forms.Label();
+            this.piercingTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // gameTimer
@@ -42,13 +43,17 @@
             // lifeLabel
             // 
             this.lifeLabel.AutoSize = true;
-            this.lifeLabel.Font = new System.Drawing.Font("DynaPuff Medium", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lifeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lifeLabel.ForeColor = System.Drawing.Color.White;
             this.lifeLabel.Location = new System.Drawing.Point(984, 575);
             this.lifeLabel.Name = "lifeLabel";
-            this.lifeLabel.Size = new System.Drawing.Size(68, 29);
+            this.lifeLabel.Size = new System.Drawing.Size(67, 29);
             this.lifeLabel.TabIndex = 0;
             this.lifeLabel.Text = "lives";
+            // 
+            // piercingTimer
+            // 
+            this.piercingTimer.Enabled = true;
             // 
             // GameScreen
             // 
@@ -72,5 +77,6 @@
 
         private System.Windows.Forms.Timer gameTimer;
         private System.Windows.Forms.Label lifeLabel;
+        private System.Windows.Forms.Timer piercingTimer;
     }
 }

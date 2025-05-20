@@ -18,6 +18,8 @@ namespace BrickBreaker
     public partial class GameScreen : UserControl
     {
         #region global values
+        bool piercingBall = false;
+      
 
         //player1 button control keys - DO NOT CHANGE
         Boolean leftArrowDown, rightArrowDown;
@@ -95,6 +97,9 @@ namespace BrickBreaker
 
             // start the game engine loop
             gameTimer.Enabled = true;
+          
+
+
         }
 
         public void LFischStart()
@@ -186,7 +191,7 @@ namespace BrickBreaker
                     // Block was hit — now spawn a powerup
                     if (rand.Next(0, 100) < 25) // 20% chance
                     {
-                        string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle" };
+                        string[] types = { "ExtraLife", "SpeedBoost", "SpeedReduction", "BigPaddle", "BulletBoost" };
                         string type = types[rand.Next(types.Length)];
 
                         Powerup newPowerup = new Powerup(b.x, b.y, type);
@@ -197,7 +202,25 @@ namespace BrickBreaker
                     break;
                 }
             }
+            Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
+            for (int i = blocks.Count - 1; i >= 0; i--)
+            {
+                Block b = blocks[i];
+                Rectangle blockRect = new Rectangle(b.x, b.y, b.width, b.height);
 
+                if (ballRect.IntersectsWith(blockRect))
+                {
+                    blocks.RemoveAt(i);
+
+                    if (!piercingBall)
+                    {
+                        // Reverse ball direction if not piercing
+                        ball.speedMultiplier *= -1;
+                        break; // Exit loop so only one block is hit
+                    }
+                    // If piercing, no bounce and continue checking next block
+                }
+            }
 
             foreach (Powerup p in powerups)
             {
@@ -240,5 +263,36 @@ namespace BrickBreaker
                 p.Draw(e.Graphics);
             }
         }
+        private void ApplyPowerup(string type)
+        {
+            switch (type)
+            {
+                case "ExtraLife":
+                    lives++; // Assuming you have a 'lives' variable
+                    break;
+                case "SpeedBoost":
+                    ball.speedMultiplier += 2; // Assuming you have a 'ballSpeed' or similar
+                    break;
+                case "BigPaddle":
+                    paddle.width += 40; // Temporarily increase paddle size
+                    break;
+                case "SpeedReduction":
+                    ball.speedMultiplier = Math.Max(2, ball.speedMultiplier - 2); // Don't go below 2
+                    break;
+                case "BulletBoost":
+                    piercingBall = true;
+
+                    // Start a timer to turn it off after 5 seconds
+                    piercingTimer.Interval = 5000;
+                    piercingTimer.Tick += (s, e) =>
+                    {
+                        piercingBall = false;
+                        piercingTimer.Stop();
+                    };
+                    piercingTimer.Start();
+                    break;
+            }
+        }
+
     }
 }
