@@ -44,10 +44,6 @@ namespace BrickBreaker
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
         SolidBrush ballBrush = new SolidBrush(ballColor);
-        SolidBrush blockBrush = new SolidBrush(Color.Red);
-        SolidBrush redBrush = new SolidBrush(Color.Red);
-        SolidBrush blueBrush = new SolidBrush(Color.Blue);
-        SolidBrush greenBrush = new SolidBrush(Color.Green);
 
 
         List<Powerup> powerups = new List<Powerup>();
@@ -62,6 +58,7 @@ namespace BrickBreaker
         {
             InitializeComponent();
             OnStart();
+            LoadBlocks();
 
             gameSound.Open(new Uri(Application.StartupPath + "/Resources/backMusic.wav"));
             gameSound.MediaEnded += new EventHandler(gameSound_MediaEnded);
@@ -97,28 +94,6 @@ namespace BrickBreaker
             int ySpeed = 6;
             double speedMultiplier = 0.8; // speed multiplier for ball speed -> still buggy for values > 1. 
             ball = new Ball(ballX, ballY, xSpeed, ySpeed, ballSize, speedMultiplier); // added parameter
-
-            #region Creates blocks for generic level. Need to replace with code that loads levels.
-
-            //TODO - replace all the code in this region eventually with code that loads levels from xml files
-
-            blocks.Clear();
-            int x = 10;
-
-            while (blocks.Count < 12)
-            {
-                x += 57;
-                Block b1 = new Block(x, 10, 1, Color.White);
-                blocks.Add(b1);
-            }
-
-            blocks.Clear();
-            LoadBlocks();
-
-            #endregion
-
-            // start the game engine loop
-            gameTimer.Enabled = false;
         }
 
         public void LFischStart()
@@ -308,28 +283,25 @@ namespace BrickBreaker
             {
                 Rectangle recNumber = new Rectangle(b.x, b.y, b.width, b.height);
 
-                switch (b.hp)
+                if (b.colour == Color.Red)
                 {
-                    case 1:
-                        e.Graphics.FillRectangle(redBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    case 2:
-                        e.Graphics.FillRectangle(blueBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    case 3:
-                        e.Graphics.FillRectangle(greenBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    case 4:
-                        e.Graphics.FillRectangle(blockBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    default:
-                        e.Graphics.FillRectangle(blockBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
+                    e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                }
+                else if (b.colour == Color.Blue)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.blueCoral, recNumber);
+                }
+                else if (b.colour == Color.Pink)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.pinkCoral, recNumber);
+                }
+                else if (b.colour == Color.Yellow)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.yellowCoral, recNumber);
+                }
+                else if (b.colour == Color.Gray)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.grayCoral, recNumber);
                 }
             }
 
@@ -344,7 +316,8 @@ namespace BrickBreaker
 
         private void LoadBlocks()
         {
-            string newX, newY, newHp, newColour;
+            
+            string newX, newY, newColour;
 
             //Open the XML file and place it in reader 
             XmlReader reader = XmlReader.Create($"{currentLevel}.xml");
@@ -360,15 +333,11 @@ namespace BrickBreaker
                     newY = reader.ReadString();
                     int blockY = Convert.ToInt32(newY);
 
-                    reader.ReadToNextSibling("hp");
-                    newHp = reader.ReadString();
-                    int blockHp = Convert.ToInt32(newHp);
-
                     reader.ReadToNextSibling("colour");
                     newColour = reader.ReadString();
                     Color blockColour = Color.FromName(newColour); // potential error source later on
 
-                    Block b = new Block(blockX, blockY, blockHp, blockColour);
+                    Block b = new Block(blockX, blockY, blockColour);
                     blocks.Add(b);
                 }
             }

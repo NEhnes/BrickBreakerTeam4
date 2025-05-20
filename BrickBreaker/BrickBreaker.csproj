@@ -212,6 +212,26 @@
     <None Include="Resources\Screenshot 2025-05-05 1345122.png" />
     <None Include="Resources\Screenshot 2025-05-05 1345121.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\blueCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\greyCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pinkCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellowCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Level3.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
