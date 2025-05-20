@@ -50,10 +50,6 @@ namespace BrickBreaker
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
         SolidBrush ballBrush = new SolidBrush(ballColor);
-        SolidBrush blockBrush = new SolidBrush(Color.Red);
-        SolidBrush redBrush = new SolidBrush(Color.Red);
-        SolidBrush blueBrush = new SolidBrush(Color.Blue);
-        SolidBrush greenBrush = new SolidBrush(Color.Green);
 
         // Powerup management and random object
         List<Powerup> powerups = new List<Powerup>();
@@ -77,6 +73,7 @@ namespace BrickBreaker
         {
             InitializeComponent();
             OnStart();
+            LoadBlocks();
 
         }
 
@@ -352,28 +349,25 @@ namespace BrickBreaker
             {
                 Rectangle recNumber = new Rectangle(b.x, b.y, b.width, b.height);
 
-                switch (b.hp)   // REPLACED WITH SOLID COLOURS BECAUSE NATHAN DOESN'T HAVE RESOURCES
+                if (b.colour == Color.Red)
                 {
-                    case 1: 
-                        e.Graphics.FillRectangle(redBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    case 2:
-                        e.Graphics.FillRectangle(blueBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    case 3:
-                        e.Graphics.FillRectangle(greenBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    case 4:
-                        e.Graphics.FillRectangle(blockBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
-                    default:
-                        e.Graphics.FillRectangle(blockBrush, recNumber);
-                        //e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
-                        break;
+                    e.Graphics.DrawImage(Properties.Resources.redCoral, recNumber);
+                }
+                else if (b.colour == Color.Blue)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.blueCoral, recNumber);
+                }
+                else if (b.colour == Color.Pink)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.pinkCoral, recNumber);
+                }
+                else if (b.colour == Color.Yellow)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.yellowCoral, recNumber);
+                }
+                else if (b.colour == Color.Gray)
+                {
+                    e.Graphics.DrawImage(Properties.Resources.grayCoral, recNumber);
                 }
             }
 
@@ -416,7 +410,8 @@ namespace BrickBreaker
 
         private void LoadBlocks()
         {
-            string newX, newY, newHp, newColour;
+            
+            string newX, newY, newColour;
 
             //Open the XML file and place it in reader 
             XmlReader reader = XmlReader.Create($"{currentLevel}.xml");
@@ -432,15 +427,11 @@ namespace BrickBreaker
                     newY = reader.ReadString();
                     int blockY = Convert.ToInt32(newY);
 
-                    reader.ReadToNextSibling("hp");
-                    newHp = reader.ReadString();
-                    int blockHp = Convert.ToInt32(newHp);
-
                     reader.ReadToNextSibling("colour");
                     newColour = reader.ReadString();
                     Color blockColour = Color.FromName(newColour); // potential error source later on
 
-                    Block b = new Block(blockX, blockY, blockHp, blockColour);
+                    Block b = new Block(blockX, blockY, blockColour);
                     blocks.Add(b);
                 }
             }

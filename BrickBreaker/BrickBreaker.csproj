@@ -219,6 +219,26 @@
     <None Include="Resources\Screenshot 2025-05-05 1345121.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\blueCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\greyCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pinkCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yellowCoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Level3.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\audiomass-output.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

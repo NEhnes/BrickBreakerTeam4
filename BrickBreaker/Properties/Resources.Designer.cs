@@ -81,12 +81,42 @@ namespace BrickBreaker.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap blueCoral {
+            get {
+                object obj = ResourceManager.GetObject("blueCoral", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] DynaPuff_VariableFont_wdth_wght {
             get {
                 object obj = ResourceManager.GetObject("DynaPuff_VariableFont_wdth_wght", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap grayCoral {
+            get {
+                object obj = ResourceManager.GetObject("grayCoral", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pinkCoral {
+            get {
+                object obj = ResourceManager.GetObject("pinkCoral", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -102,6 +132,9 @@ namespace BrickBreaker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap redCoral {
+            get {
+                object obj = ResourceManager.GetObject("redCoral", resourceCulture);
         internal static System.Drawing.Bitmap seaweed_removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("seaweed_removebg_preview", resourceCulture);
@@ -145,6 +178,16 @@ namespace BrickBreaker.Properties {
         internal static System.Drawing.Bitmap wavesPic {
             get {
                 object obj = ResourceManager.GetObject("wavesPic", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap yellowCoral {
+            get {
+                object obj = ResourceManager.GetObject("yellowCoral", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
