@@ -32,8 +32,8 @@ namespace BrickBreaker
 
         public void Move()
         {
-            x = (int)(x + xSpeed * speedMultiplier);
-            y = (int)(y + ySpeed * speedMultiplier);
+            x = (int)(x + xSpeed * GameScreen.speedMultiplier);
+            y = (int)(y + ySpeed * GameScreen.speedMultiplier);
 
             moveCounter++;
             if (moveCounter > 100) moveCounter = 0;
@@ -46,7 +46,6 @@ namespace BrickBreaker
 
             if (ballRec.IntersectsWith(blockRec))
             {
-                CycleBallColor();
 
                 Rectangle intersection = Rectangle.Intersect(ballRec, blockRec); // get the intersection rectangle
 
@@ -78,7 +77,6 @@ namespace BrickBreaker
 
             if (ballRec.IntersectsWith(paddleRec) && !lastHitPaddle)
             {
-                CycleBallColor();
 
                 Rectangle intersection = Rectangle.Intersect(ballRec, paddleRec);
 
@@ -139,21 +137,18 @@ namespace BrickBreaker
             // Collision with left wall
             if (x <= 0)
             {
-                CycleBallColor();
                 x = 0;
                 xSpeed *= -1;
             }
             // Collision with right wall
             if (x >= (UC.Width - size))
             {
-                CycleBallColor();
                 x = UC.Width - size;
                 xSpeed *= -1;
             }
             // Collision with top wall
             if (y <= 2)
             {
-                CycleBallColor();
                 y = 2;
                 ySpeed *= -1;
             }
