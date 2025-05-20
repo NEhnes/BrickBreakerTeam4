@@ -34,6 +34,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.backButtonC = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -108,11 +111,37 @@
             this.label6.Text = "Chief Technical Designer\r\nNathan Ehnes";
             this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::BrickBreaker.Properties.Resources.wavesPic;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 511);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1067, 166);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            // 
+            // backButtonC
+            // 
+            this.backButtonC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(248)))), ((int)(((byte)(255)))));
+            this.backButtonC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.backButtonC.Font = new System.Drawing.Font("DynaPuff", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backButtonC.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(7)))), ((int)(((byte)(112)))));
+            this.backButtonC.Location = new System.Drawing.Point(489, 423);
+            this.backButtonC.Name = "backButtonC";
+            this.backButtonC.Size = new System.Drawing.Size(89, 82);
+            this.backButtonC.TabIndex = 7;
+            this.backButtonC.Text = "BACK";
+            this.backButtonC.UseVisualStyleBackColor = false;
+            this.backButtonC.Click += new System.EventHandler(this.backButtonC_Click);
+            // 
             // Credits
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(7)))), ((int)(((byte)(112)))));
+            this.Controls.Add(this.backButtonC);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label4);
@@ -121,6 +150,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Credits";
             this.Size = new System.Drawing.Size(1067, 677);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,5 +164,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button backButtonC;
     }
 }

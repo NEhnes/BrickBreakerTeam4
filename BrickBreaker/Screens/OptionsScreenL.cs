@@ -19,10 +19,12 @@ namespace BrickBreaker.Screens
             lightCheck.Checked = true;
             darkCheck.Checked = false;
         }
+        public static bool light = true;
 
         private void darkCheck_CheckedChanged(object sender, EventArgs e)
         {
             lightCheck.Checked = false;
+            light = false;
 
             Form f = this.FindForm();
 
@@ -39,9 +41,21 @@ namespace BrickBreaker.Screens
             Form f = this.FindForm();
 
             MenuScreen ms = new MenuScreen();
-            ms.Location = new Point((f.Width - ms.Width) / 2, (f.Height - ms.Height));
+            ms.Location = new Point((f.Width - ms.Width) / 2, (f.Height - ms.Height)/2);
             ms.Show();
 
+            f.Controls.Add(ms);
+            f.Controls.Remove(this);
+        }
+
+        public void creditsLabel_Click(object sender, EventArgs e)
+        {
+            Form f = this.FindForm();
+            Credits cd = new Credits();
+
+            cd.Show();
+
+            f.Controls.Add(cd);
             f.Controls.Remove(this);
         }
     }

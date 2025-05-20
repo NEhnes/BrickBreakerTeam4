@@ -44,8 +44,8 @@ namespace BrickBreaker
 
         private void exitButton_Enter(object sender, EventArgs e)
         {
-            exitButton.BackColor = Color.FromArgb(160, 11, 26, 155);
-            playButton.BackColor = Color.FromArgb(160, 48, 59, 207);
+            playButton.BackColor = Color.FromArgb(160, 11, 26, 155);
+            exitButton.BackColor = Color.FromArgb(160, 48, 59, 207);
             optionsButton.BackColor = Color.FromArgb(0, 40, 84);
         }
 
