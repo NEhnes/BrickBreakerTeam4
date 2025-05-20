@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Xml;
 using System.Runtime.CompilerServices;
+using System.Timers;
 
 namespace BrickBreaker
 {
@@ -39,7 +40,7 @@ namespace BrickBreaker
 
         // list of all blocks for current level
         List<Block> blocks = new List<Block>();
-        string currentLevel = "Level1";
+        string currentLevel = "Level2";
 
         // Brushes
         SolidBrush paddleBrush = new SolidBrush(Color.White);
@@ -54,14 +55,13 @@ namespace BrickBreaker
         List<Powerup> activePowerups = new List<Powerup>();
         Random rand = new Random();
 
-        // Powerup duration
+        // Powerup duration & timers
         int powerupTime = 5000; //5s life
-        Timer SpeedBoostTimer = new Timer();
-        Timer BigPaddleTimer = new Timer();
-        Timer SpeedReductionTimer = new Timer();
-        Timer BulletTimer = new Timer();
-
-
+        private static System.Timers.Timer SpeedBoostTimer = new System.Timers.Timer(5000);
+        private static System.Timers.Timer BigPaddleTimer = new System.Timers.Timer(5000);
+        private static System.Timers.Timer SpeedReductionTimer = new System.Timers.Timer(5000);
+        private static System.Timers.Timer BulletTimer = new System.Timers.Timer(5000);
+        private static bool timerUp = false; ///TESTING
 
         // Game Sounds
         SoundPlayer popPlayer = new SoundPlayer(Properties.Resources.popSound);
@@ -79,6 +79,7 @@ namespace BrickBreaker
 
         public void OnStart()
         {
+            InitPowerupTimers(); // add event handlers for timers
 
             //set life counter
             lives = 3;
@@ -365,6 +366,13 @@ namespace BrickBreaker
             {
                 p.Draw(e.Graphics);
             }
+
+            // DISPLAY RED RECTANGLE IN TOP RIGHT WHEN A TIMER EXPIRES -- DELETE LATER -- TESTING ONLY
+            if (timerUp)
+            {
+                Rectangle testingRect = new Rectangle(670, 40, 30, 30);
+                e.Graphics.FillRectangle(redBrush, testingRect);
+            }
         }
 
         private void LoadBlocks()
@@ -405,6 +413,7 @@ namespace BrickBreaker
          */
         private void PowerupCollision()
         {
+            // add intersecting powerups to delete list
             List<Powerup> deleteList = new List<Powerup>();
             foreach (Powerup p in powerups)
             {
@@ -417,6 +426,7 @@ namespace BrickBreaker
                 }
             }
 
+            // add to activePowerups, remove from powerups list, start timer
             foreach (Powerup p in deleteList) 
             {
                 activePowerups.Add(p);
@@ -440,6 +450,23 @@ namespace BrickBreaker
                         break;
                 }
             }
+        }
+
+        // Timer elapsed event handler
+        private static void TimerElapsed(object sender, ElapsedEventArgs e, String timerId)
+        {
+            Console.WriteLine($"Timer {timerId} finished at {DateTime.Now}");
+            timerUp = true;
+
+            // TODO: Need to trigger powerup effect and remove from activeList
+        }
+
+        private void InitPowerupTimers() // assign event handlers for powerup timers.
+        {
+            SpeedBoostTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "SpeedBoost_Timer");
+            BigPaddleTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "BigPaddle_Timer");
+            SpeedReductionTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "SpeedReduction_Timer");
+            BulletTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "Bullet_Timer");
         }
     }
 }
