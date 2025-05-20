@@ -1,4 +1,4 @@
-﻿/*  Created by: Liam, Sean, Nathan, Aaron
+/*  Created by: Liam, Sean, Nathan, Aaron
  *  Project: Brick Breaker
  *  Date: May '25
  */ 
@@ -24,6 +24,8 @@ namespace BrickBreaker
     public partial class GameScreen : UserControl
     {
         #region global values
+        bool piercingBall = false;
+      
 
         //player1 button control keys - DO NOT CHANGE
         Boolean leftArrowDown, rightArrowDown;
@@ -271,7 +273,7 @@ namespace BrickBreaker
                     // Block was hit — now spawn a powerup
                     if (rand.Next(0, 100) < 25) // 25% chance
                     {
-                        string[] types = { "ExtraLife", "SpeedBoost", "BigPaddle", "Bullet" };
+                        string[] types = { "ExtraLife", "SpeedBoost", "SpeedReduction", "BigPaddle", "BulletBoost" };
                         string type = types[rand.Next(types.Length)];
 
                         Powerup newPowerup = new Powerup(b.x, b.y, type);
@@ -282,10 +284,27 @@ namespace BrickBreaker
                     break;
                 }
             }
+            Rectangle ballRect = new Rectangle(ball.x, ball.y, ball.size, ball.size);
+            for (int i = blocks.Count - 1; i >= 0; i--)
+            {
+                Block b = blocks[i];
+                Rectangle blockRect = new Rectangle(b.x, b.y, b.width, b.height);
 
+                if (ballRect.IntersectsWith(blockRect))
+                {
+                    blocks.RemoveAt(i);
+
+                    if (!piercingBall)
+                    {
+                        // Reverse ball direction if not piercing
+                        ball.speedMultiplier *= -1;
+                        break; // Exit loop so only one block is hit
+                    }
+                    // If piercing, no bounce and continue checking next block
+                }
+            }
             // Update ball color
             ballBrush = new SolidBrush(ballColor);
-
 
             foreach (Powerup p in powerups)
             {
@@ -366,6 +385,34 @@ namespace BrickBreaker
                 p.Draw(e.Graphics);
             }
         }
+        
+        private void ApplyPowerup(string type)
+        {
+            switch (type)
+            {
+                case "ExtraLife":
+                    lives++; // Assuming you have a 'lives' variable
+                    break;
+                case "SpeedBoost":
+                    ball.speedMultiplier += 2; // Assuming you have a 'ballSpeed' or similar
+                    break;
+                case "BigPaddle":
+                    paddle.width += 40; // Temporarily increase paddle size
+                    break;
+                case "SpeedReduction":
+                    ball.speedMultiplier = Math.Max(2, ball.speedMultiplier - 2); // Don't go below 2
+                    break;
+                case "BulletBoost":
+                    piercingBall = true;
+
+                    // Start a timer to turn it off after 5 seconds
+                    piercingTimer.Interval = 5000;
+                    piercingTimer.Tick += (s, e) =>
+                    {
+                        piercingBall = false;
+                        piercingTimer.Stop();
+                    };
+                    piercingTimer.Start();
 
         private void LoadBlocks()
         {
@@ -397,104 +444,6 @@ namespace BrickBreaker
                     blocks.Add(b);
                 }
             }
-        }
-
-        private void PowerupCollision()
-        {
-            // add intersecting powerups to delete list
-            // MUST be done (removing elements while iterating gives enumeration error)
-            List<Powerup> intersectingList = new List<Powerup>();
-
-            foreach (Powerup p in powerups)
-            {
-                Rectangle powerupRec = new Rectangle(p.x, p.y, p.size, p.size);
-                Rectangle paddleRec = new Rectangle(paddle.x, paddle.y, paddle.width, paddle.height);
-
-                if (powerupRec.IntersectsWith(paddleRec)) intersectingList.Add(p);
-            }
-
-            // add to activePowerups, remove from powerups list, start corresponding timer
-            foreach (Powerup p in intersectingList)
-            {
-                activePowerups.Add(p);
-                powerups.Remove(p);
-
-                switch (p.type)
-                {
-                    case "ExtraLife":
-                        lives++;
-                        break;
-                    case "SpeedBoost":
-                        SpeedBoostTimer.Start();
-
-                        ballColor = Color.Blue;
-                        // start effect here
-
-                        break;
-                    case "BigPaddle":
-                        BigPaddleTimer.Start();
-
-                        ballColor = Color.Orange;
-                        // start effect here
-
-                        break;
-                    case "SpeedReduction":
-                        SpeedReductionTimer.Start();
-
-                        ballColor = Color.Red;
-                        // start effect here
-
-                        break;
-                    case "Bullet":
-                        BulletTimer.Start();
-
-                        ballColor = Color.Yellow;
-                        // start effect here
-
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        private static void TimerElapsed(object sender, ElapsedEventArgs e, String timerId)  // Timer elapsed event listener
-        {
-            Console.WriteLine($"Timer {timerId} finished at {DateTime.Now}");
-
-            switch (timerId)
-            {
-                case "SpeedBoost":
-
-                    // end effect
-                    
-                    break;
-                case "BigPaddle":
-                    
-                    // end effect
-                    
-                    break;
-                case "SpeedReduction":
-                    
-                    // end effect
-                    
-                    break;
-                case "Bullet":
-                    
-                    // end effect
-                    
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void InitPowerupTimers() // assign event handlers for powerup timers.
-        {
-            SpeedBoostTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "SpeedBoost");
-            BigPaddleTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "BigPaddle");
-            SpeedReductionTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "SpeedReduction");
-            BulletTimer.Elapsed += (sender, e) => TimerElapsed(sender, e, "Bullet");
         }
     }
 }
